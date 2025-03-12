@@ -172,17 +172,10 @@ footer p {
   background-color: #555;
 }
 
-.imagemInicial{
-  margin-bottom: 7vh;
-  height: 50vh;
-  border-radius: 50%;
-  margin-right: 30px;
-}
-
 .containerInicialPage{
   display: flex;
   justify-content: center;
-  margin: auto 5vw auto auto;
+  margin: -30px 5vw auto auto;
   align-items: center;
 }
 
@@ -193,4 +186,52 @@ footer p {
   padding-bottom: 40px;
   border-radius: 1em;
   border: 0.5px solid black;
+}
+
+#botaoSincCont{
+  margin-top: 55px;
+}
+
+.phraseInitial{
+  position: absolute;
+  font-weight: bolder;
+  font-size: 35px;
+  display: flex;
+}
+
+#one{
+  color:rgb(157, 158, 241);
+}
+
+#two{
+  color: #555;
+  margin-top: 20px;
+}
+
+#three{
+  color: rgb(13, 13, 122);
+  margin-top: 40px;
+}
+
+#divSync{
+  margin-top: 30px
+}
+
+#services{
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 80px;
+}
+
+#tech-list{
+  font-weight: bolder;
+  width: 60vw;
+  display: flex;
+  justify-content: space-around;
+  padding: 3px;
+  color: rgb(22, 13, 141);
+  border: 2px solid rgb(22, 13, 141);
+  border-radius: 15px;
 }

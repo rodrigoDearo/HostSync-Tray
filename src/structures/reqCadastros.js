@@ -468,6 +468,10 @@ async function setCategoria(name){
           gravarLog(`CRIADO CATEGORIA ${name} -> ${response}`);
           resolve(response);
         })
+        .catch((cause) => {
+          gravarLogErro(`ERRO AO CRIAR CATEGORIA ${name} -> ${cause}`);
+          resolve()
+        })
       }
 
       fs.writeFileSync('./src/build/tray/categoria.json', JSON.stringify(dados));
@@ -650,7 +654,7 @@ async function tratativaProdutos(ID_PRODUTO, PRODUTO, ESTOQUE, VALOR_VENDA, CUST
                   })
                   .catch(err => {
                     console.log(err)
-                    gravarLogErro(`O PRODUTO ${PRODUTO} NÃO FOI CADASTRADO DEVIDO A UM ERRO, ENTRE EM CONTATO COM SUPORTE TÉCNICO`) 
+                    gravarLogErro(`O PRODUTO ${PRODUTO} NÃO FOI CADASTRADO DEVIDO A UM ERRO, ENTRE EM CONTATO COM SUPORTE TÉCNICO, ERRO: ${JSON.stringify(err)}`) 
                   })
                 }
                                  
@@ -744,14 +748,14 @@ async function tratativaDeImagem(PRODUTO, ID_PRODUTO, ID_PRODUTO_TRAY, FOTO){
 
 
 function gravarLog(mensagem) {
-  if (!fs.existsSync('../logs')) {
-    fs.mkdirSync('../logs');
+  if (!fs.existsSync('./logs')) {
+    fs.mkdirSync('./logs');
   }
   const data = new Date();
   data.setHours(data.getHours() - 3);
   const dataFormatada = `${data.getFullYear()}-${data.getMonth() + 1}-${data.getDate()}`;
   const logMessage = `[${data.toISOString()}]: ${mensagem}\n`;
-  const logFileName = `../../../logs/log_${dataFormatada}.txt`;
+  const logFileName = `../../logs/log_${dataFormatada}.txt`;
   const logFilePath = path.join(__dirname, logFileName);
   fs.appendFile(logFilePath, logMessage, (err) => {
     if (err) {
@@ -763,19 +767,19 @@ function gravarLog(mensagem) {
 }
 
 function gravarLogErro(mensagem) {
-  if (!fs.existsSync('../logs')) {
-    fs.mkdirSync('../logs');
+  if (!fs.existsSync('./logs')) {
+    fs.mkdirSync('./logs');
   }
   
-  if (!fs.existsSync('../logs/logsErr')) {
-    fs.mkdirSync('../logs/logsErr');
+  if (!fs.existsSync('./logs/logsErr')) {
+    fs.mkdirSync('./logs/logsErr');
   }
 
   const data = new Date();
   data.setHours(data.getHours() - 3);
   const dataFormatada = `${data.getFullYear()}-${data.getMonth() + 1}-${data.getDate()}`;
   const logMessage = `[${data.toISOString()}]: ${mensagem}\n`;
-  const logFileName = `../../../logs/logsErr/log_${dataFormatada}Err.txt`;
+  const logFileName = `../../logs/logsErr/log_${dataFormatada}Err.txt`;
   const logFilePath = path.join(__dirname, logFileName);
 
   fs.appendFile(logFilePath, logMessage, (err) => {

@@ -122,7 +122,7 @@ async function refreshToken(){
         });
     }
     catch(error){
-        console.err(error);
+      console.error(error.response.data.causes);
     }
 }
 
@@ -192,7 +192,7 @@ async function cadastrarProduto(thisnome, thisestoque, thisprecoVenda, thispreco
       const id = response.data.id
       resolve(id);
     } catch (error) {
-      reject(error);
+      reject(error.response.data.causes);
     }
   });
 }
@@ -261,7 +261,7 @@ async function atualizarProduto(thisnome, thisestoque, thisprecoVenda, thispreco
             })
           }
           else{
-            console.log(error);
+            console.error(error.response.data.causes);
           }
         });
 
@@ -293,7 +293,7 @@ async function atualizarVariante(thisidproduto, thisidvariante, thisdescricao, t
           resolve()
         }
         else{
-          console.error(error)
+          console.error(error.response.data.causes);
         }
       });
     } catch (error) {
@@ -354,7 +354,8 @@ async function criarCategoria(name){
             resolve(response.data.id);
           })
           .catch((error) => {
-            console.error(error);
+            console.log(error.response.data.causes.Category.name);
+            reject(error.response.data.causes.Category.name);
           });
       })
 
@@ -399,7 +400,8 @@ async function criarSubCategoria(name, idFather){
             resolve(response.data.id);
           })
           .catch((error) => {
-            console.error(error.response.data);
+            console.log(error.response.data.causes);
+            reject();
           });
       })
 
@@ -424,7 +426,7 @@ async function deletarProduto(thisid) {
           });
       });
   } catch (error) {
-    console.error(error);
+    console.error(error.response.data.causes);
   }
 }
 

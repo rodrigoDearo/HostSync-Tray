@@ -1,0 +1,436 @@
+{
+    "categorias": {
+        "1": {
+            "id": "699921",
+            "subcategorias": {}
+        },
+        "2": {
+            "id": "699923",
+            "subcategorias": {}
+        },
+        "4": {
+            "id": "699925",
+            "subcategorias": {}
+        },
+        "5": {
+            "id": "699927",
+            "subcategorias": {}
+        },
+        "6": {
+            "id": "699929",
+            "subcategorias": {}
+        },
+        "8": {
+            "id": "699931",
+            "subcategorias": {}
+        },
+        "9": {
+            "id": "699933",
+            "subcategorias": {}
+        },
+        "11": {
+            "id": "699935",
+            "subcategorias": {}
+        },
+        "13": {
+            "id": "699937",
+            "subcategorias": {}
+        },
+        "14": {
+            "id": "699939",
+            "subcategorias": {}
+        },
+        "15": {
+            "id": "699941",
+            "subcategorias": {}
+        },
+        "16": {
+            "id": "699943",
+            "subcategorias": {}
+        },
+        "17": {
+            "id": "699945",
+            "subcategorias": {}
+        },
+        "18": {
+            "id": "699947",
+            "subcategorias": {}
+        },
+        "19": {
+            "id": "699949",
+            "subcategorias": {}
+        },
+        "20": {
+            "id": "699951",
+            "subcategorias": {}
+        },
+        "21": {
+            "id": "699953",
+            "subcategorias": {}
+        },
+        "23": {
+            "id": "699955",
+            "subcategorias": {}
+        },
+        "24": {
+            "id": "699957",
+            "subcategorias": {}
+        },
+        "25": {
+            "id": "699959",
+            "subcategorias": {}
+        },
+        "28": {
+            "id": "699961",
+            "subcategorias": {}
+        },
+        "30": {
+            "id": "699963",
+            "subcategorias": {}
+        },
+        "31": {
+            "id": "699965",
+            "subcategorias": {}
+        },
+        "32": {
+            "id": "699967",
+            "subcategorias": {}
+        },
+        "34": {
+            "id": "699969",
+            "subcategorias": {}
+        },
+        "36": {
+            "id": "699971",
+            "subcategorias": {}
+        },
+        "37": {
+            "id": "699973",
+            "subcategorias": {}
+        },
+        "38": {
+            "id": "699975",
+            "subcategorias": {}
+        },
+        "41": {
+            "id": "699977",
+            "subcategorias": {}
+        },
+        "44": {
+            "id": "699979",
+            "subcategorias": {}
+        },
+        "45": {
+            "id": "699981",
+            "subcategorias": {}
+        },
+        "47": {
+            "id": "699983",
+            "subcategorias": {}
+        },
+        "48": {
+            "id": "699985",
+            "subcategorias": {}
+        },
+        "51": {
+            "id": "699987",
+            "subcategorias": {}
+        },
+        "52": {
+            "id": "699989",
+            "subcategorias": {}
+        },
+        "COLAR": {
+            "id": "699991",
+            "subcategorias": {}
+        },
+        "BLAZER": {
+            "id": "699993",
+            "subcategorias": {}
+        },
+        "REGATA TRICO": {
+            "id": "699995",
+            "subcategorias": {}
+        },
+        "T-SHIRT": {
+            "id": "699997",
+            "subcategorias": {}
+        },
+        "BLUSINHA": {
+            "id": "699999",
+            "subcategorias": {}
+        },
+        "CONJUNTO": {
+            "id": "700001",
+            "subcategorias": {}
+        },
+        "JAQUETA": {
+            "id": "700003",
+            "subcategorias": {}
+        },
+        "CAMISA": {
+            "id": "700005",
+            "subcategorias": {}
+        },
+        "CINTO": {
+            "id": "700007",
+            "subcategorias": {}
+        },
+        "CROPPED": {
+            "id": "700009",
+            "subcategorias": {}
+        },
+        "BRINCO": {
+            "id": "700011",
+            "subcategorias": {}
+        },
+        "BOLSA": {
+            "id": "700013",
+            "subcategorias": {}
+        },
+        "BERMUDA JEANS": {
+            "id": "700015",
+            "subcategorias": {}
+        },
+        "VESTIDO": {
+            "id": "700017",
+            "subcategorias": {}
+        },
+        "CASACO": {
+            "id": "700019",
+            "subcategorias": {}
+        },
+        "TRICOT": {
+            "id": "700021",
+            "subcategorias": {}
+        },
+        "CAMISETA": {
+            "id": "700023",
+            "subcategorias": {}
+        },
+        "KIMONO": {
+            "id": "700025",
+            "subcategorias": {}
+        },
+        "CHEMISE": {
+            "id": "700027",
+            "subcategorias": {}
+        },
+        "SOBRETUDO": {
+            "id": "700029",
+            "subcategorias": {}
+        },
+        "REGATA": {
+            "id": "700031",
+            "subcategorias": {}
+        },
+        "CASAQUETO": {
+            "id": "700033",
+            "subcategorias": {}
+        },
+        "TOP": {
+            "id": "700035",
+            "subcategorias": {}
+        },
+        "JARDINEIRA": {
+            "id": "700037",
+            "subcategorias": {}
+        },
+        "COLETE": {
+            "id": "700039",
+            "subcategorias": {}
+        },
+        "SHORTS": {
+            "id": "700041",
+            "subcategorias": {}
+        },
+        "BLUSA": {
+            "id": "700043",
+            "subcategorias": {}
+        },
+        "MOLETON": {
+            "id": "700045",
+            "subcategorias": {}
+        },
+        "CACHARREL": {
+            "id": "700047",
+            "subcategorias": {}
+        },
+        "MAX": {
+            "id": "700049",
+            "subcategorias": {}
+        },
+        "MAXI": {
+            "id": "700051",
+            "subcategorias": {}
+        },
+        "TWIN SET": {
+            "id": "700053",
+            "subcategorias": {}
+        },
+        "CORTA VENTO": {
+            "id": "700055",
+            "subcategorias": {}
+        },
+        "CARDIGAN": {
+            "id": "700057",
+            "subcategorias": {}
+        },
+        "MOLETOM": {
+            "id": "700059",
+            "subcategorias": {}
+        },
+        "MASCARA": {
+            "id": "700061",
+            "subcategorias": {}
+        },
+        "SUETER": {
+            "id": "700063",
+            "subcategorias": {}
+        },
+        "PIJAMA": {
+            "id": "700065",
+            "subcategorias": {}
+        },
+        "CAMISOLA": {
+            "id": "700067",
+            "subcategorias": {}
+        },
+        "CAMISAO": {
+            "id": "700069",
+            "subcategorias": {}
+        },
+        "BATA": {
+            "id": "700071",
+            "subcategorias": {}
+        },
+        "CARTEIRA": {
+            "id": "700073",
+            "subcategorias": {}
+        },
+        "CLUTH": {
+            "id": "700075",
+            "subcategorias": {}
+        },
+        "ORGANIZADOR": {
+            "id": "700077",
+            "subcategorias": {}
+        },
+        "LEN�O": {
+            "id": "700079",
+            "subcategorias": {}
+        },
+        "BODY": {
+            "id": "700081",
+            "subcategorias": {}
+        },
+        "MACAQUINHO": {
+            "id": "700083",
+            "subcategorias": {}
+        },
+        "POCHETE": {
+            "id": "700085",
+            "subcategorias": {}
+        },
+        "BIQUINI": {
+            "id": "700087",
+            "subcategorias": {}
+        },
+        "CHAVEIRO": {
+            "id": "700089",
+            "subcategorias": {}
+        },
+        "BRACELETE": {
+            "id": "700091",
+            "subcategorias": {}
+        },
+        "T�NIS": {
+            "id": "700093",
+            "subcategorias": {}
+        },
+        "MINIVESTE": {
+            "id": "700095",
+            "subcategorias": {}
+        },
+        "TOUCA": {
+            "id": "700097",
+            "subcategorias": {}
+        },
+        "BOMBER": {
+            "id": "700099",
+            "subcategorias": {}
+        },
+        "CORSET": {
+            "id": "700101",
+            "subcategorias": {}
+        },
+        "CHAPEU": {
+            "id": "700103",
+            "subcategorias": {}
+        },
+        "PULSEIRA": {
+            "id": "700105",
+            "subcategorias": {}
+        },
+        "TIARA": {
+            "id": "700107",
+            "subcategorias": {}
+        },
+        "SHACKET CORTH": {
+            "id": "700109",
+            "subcategorias": {}
+        },
+        "TRENCH": {
+            "id": "700111",
+            "subcategorias": {}
+        },
+        "SALOPETE": {
+            "id": "700113",
+            "subcategorias": {}
+        },
+        "PANTALONA": {
+            "id": "700115",
+            "subcategorias": {}
+        },
+        "PARKA": {
+            "id": "700117",
+            "subcategorias": {}
+        },
+        "ECHARPE": {
+            "id": "700119",
+            "subcategorias": {}
+        },
+        "POLO": {
+            "id": "700121",
+            "subcategorias": {}
+        },
+        "PIERCING": {
+            "id": "700123",
+            "subcategorias": {}
+        },
+        "PANTACURT": {
+            "id": "700125",
+            "subcategorias": {}
+        },
+        "ENCANTO": {
+            "id": "700127",
+            "subcategorias": {}
+        },
+        "TEE": {
+            "id": "700129",
+            "subcategorias": {}
+        },
+        "BABY LOOK": {
+            "id": "700131",
+            "subcategorias": {}
+        },
+        "GOLA": {
+            "id": "700133",
+            "subcategorias": {}
+        },
+        "LEGGING": {
+            "id": "700135",
+            "subcategorias": {}
+        }
+    }
+}

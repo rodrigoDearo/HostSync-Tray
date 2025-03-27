@@ -74,33 +74,30 @@ function leituraDosDados() {
  * Função para gerar o token de acesso, função executado quando será gerado o acess_token do cliente pela primeira vez ou quando refresh_token vence
  */
 async function createToken() {
-    try {
-        await leituraDosDados();
-  
-        let keysValue = new URLSearchParams();
-        keysValue.append('consumer_key', consumerKey);
-        keysValue.append('consumer_secret', consumerSecret);
-        keysValue.append('code', code);
-  
-        const config = {
-            headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        };
+  try {
+      await leituraDosDados();
 
-        axios.post(`${url}/auth`, keysValue, config)
-        .then((response) => {
-            console.log('Re-gerado Token de Acesso')
-            gravarDados(response.data);
-        })
-        .catch(response => {
-            console.log('error: ' + response.data);
-        });
+      const requestData = {
+          'consumer_key': consumerKey,
+          'consumer_secret': consumerSecret,
+          'code': code
+      };
 
-    } catch (error) {
-      console.log('error: ' + error);
+      const config = {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      };
 
-    }
+      const response = await axios.post(`${url}/auth`, requestData, config);
+      
+      console.log('Re-gerado Token de Acesso');
+      gravarDados(response.data);
+
+  } catch (error) {
+      console.log(requestData)
+      console.error('Erro:', error.response ? error.response.data : error.message);
+  }
 }
 
 

@@ -119,13 +119,13 @@ async function mainProcess(){
       if(mensageReturn.code == 500){
         reject(mensageReturn)
       }
-    })/*
+    })
     .then(async () => {
       let mensageReturn = await requireAllProducts(config)
       if(mensageReturn.code == 500){
         reject(mensageReturn)
       }
-    })
+    })/*
     .then(async () => {
       setInterval(async () => {
         await readNewRecords(config)

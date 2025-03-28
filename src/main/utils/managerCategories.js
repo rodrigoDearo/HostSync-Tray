@@ -3,7 +3,7 @@ const fs = require ('fs')
 const path = require('node:path')
 const { app } = require('electron')
 
-const {  } = require('./preparingRequests.js');
+const { preparingPostCategory, preparingPostSubCategory } = require('./preparingRequests.js');
 
 //const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
 const userDataPath = 'src/build';
@@ -14,19 +14,18 @@ async function returnCategoryId(category, subCategory){
     return new Promise(async (resolve, reject) => {
          let categoriesDB = JSON.parse(fs.readFileSync(pathCategories))
 
-         
-         let idSubCategory = subCategoryExist(categoriesDB, category, subCategory)
- 
          if(!category){ //category name empty
             resolve(null)
          }else
          if(category&&(!subCategory)){ //subcategory name empty but category fill
             let idCategory = categoryExist(categoriesDB, category)
-
             if(idCategory){ // category already register
                 resolve(idCategory)
             }else{ // category not register
-
+                await preparingPostCategory(category)
+                .then(async (id) => {
+                    resolve(id)
+                })
             }
          }else
          if(category&&subCategory){
@@ -36,22 +35,34 @@ async function returnCategoryId(category, subCategory){
             if(idSubCategory){ // subcategory already register
                 resolve(idSubCategory)
             }else
-            if(idCategory){ // just category exist
-                
+            if(idCategory&&(!idSubCategory)){ // just category exist
+                await preparingPostSubCategory(category, subCategory, idCategory)
+                .then(async (id) => {
+                    resolve(id)
+                })
             }else
             if((!idCategory)&&(!idSubCategory)){ // anyone exist
-
+                await preparingPostCategory(category)
+                .then(async (newIdCategory) => {
+                    setTimeout(async () => {
+                        await preparingPostSubCategory(category, subCategory, newIdCategory)
+                        .then(async (id) => {
+                            resolve(id)
+                        })
+                    }, 1500);
+                    
+                })
             }
          }
     })
 }
 
 function categoryExist(data, category) {
-    return data[category]?.ID ?? false;
+    return data[category]?.idTray ?? false;
 }
 
 function subCategoryExist(data, category, subCategory) {
-    return data[category]?.SUBGRUPOS?.[subCategory] ?? false;
+    return data[category]?.subCategories?.[subCategory] ?? false;
 }
 
 

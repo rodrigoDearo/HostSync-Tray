@@ -11,8 +11,7 @@ const userDataPath = 'src/build';
 const pathLog = path.join(userDataPath, 'logs');
 const pathConfigApp = path.join(userDataPath, 'configApp.json');
 const pathProducts = path.join(userDataPath, 'products.json');
-const pathCustomers = path.join(userDataPath, 'customers.json');
-const pathSales = path.join(userDataPath, 'sales.json');
+const pathCategories = path.join(userDataPath, 'categories.json');
 const pathErrorsDB = path.join(userDataPath, 'errorsDB.json');
 
 
@@ -65,7 +64,7 @@ function gravarLog(mensagem) {
 
 
 
-async function succesHandlingRequests(destiny, resource, idHost, idPedOk){
+async function succesHandlingRequests(destiny, resource, idHost, idTray, othersInfo){
   return new Promise(async (resolve, reject) => {
 
     if(destiny=="product"){
@@ -74,13 +73,11 @@ async function succesHandlingRequests(destiny, resource, idHost, idPedOk){
       switch (resource) {
         case "post":
           productsDB[`${idHost}`] = {
-            "idPedidoOk": `${idPedOk}`,
-            "status": "ATIVO"
+            "idTray": `${idTray}`,
+            "status": "ATIVO",
+            "variations": {}
           }
-          await incrementIdRequestPost()
-          .then(async () => {
-            await verifyToDeleteErrorRecord(destiny, idHost)
-          })
+          await verifyToDeleteErrorRecord(destiny, idHost)
           break;
 
         case "update":
@@ -100,44 +97,43 @@ async function succesHandlingRequests(destiny, resource, idHost, idPedOk){
       gravarLog('Gravado registro no banco de ' + destiny);
       resolve()
     }else
-    if(destiny=="customer"){
-      let customersDB = JSON.parse(fs.readFileSync(pathCustomers))
+    if(destiny=="category"){
+      let categoriesDB = JSON.parse(fs.readFileSync(pathCategories))
 
       switch (resource) {
         case "post":
-          customersDB[`${idHost}`] = {
-            "idPedidoOk": `${idPedOk}`,
-            "status": "ATIVO"
+          categoriesDB[`${othersInfo[0]}`] = {
+            "idTray": `${idTray}`,
+            "subCategories": {}
           }
-          await incrementIdRequestPost()
-          .then(async () => {
-            await verifyToDeleteErrorRecord(destiny, idHost)
-          })
-          break;
-
-          case "update":
-          
           break;
 
         case "delete":
-          customersDB[`${idHost}`].status = "INATIVO";
+          categoriesDB[`${othersInfo[0]}`].status = "INATIVO";
           break;
 
-        case "undelete":
-          customersDB[`${idHost}`].status = "ATIVO";
-          break;
       }
       
-      fs.writeFileSync(pathCustomers, JSON.stringify(customersDB), 'utf-8')
+      fs.writeFileSync(pathCategories, JSON.stringify(categoriesDB), 'utf-8')
       gravarLog('Gravado registro no banco de ' + destiny);
       resolve()
     }else
-    if(destiny=="sale"){
-      let salesDB = JSON.parse(fs.readFileSync(pathSales))
+    if(destiny=="subcategory"){
+      let categoriesDB = JSON.parse(fs.readFileSync(pathCategories))
 
-      salesDB[idPedOk] = idHost;
+      switch (resource) {
+        case "post":
+          categoriesDB[`${othersInfo[1]}`].subCategories[`${othersInfo[0]}`] = idTray
+          break;
+
+        case "delete":
+          delete categoriesDB[`${othersInfo[0]}`].subCategories[`${othersInfo[1]}`]
+          break;
+
+
+      }
       
-      fs.writeFileSync(pathSales, JSON.stringify(salesDB), 'utf-8')
+      fs.writeFileSync(pathCategories, JSON.stringify(categoriesDB), 'utf-8')
       gravarLog('Gravado registro no banco de ' + destiny);
       resolve()
     }
@@ -145,7 +141,7 @@ async function succesHandlingRequests(destiny, resource, idHost, idPedOk){
 }
 
 
-async function errorHandlingRequest(destiny, resource, idHost, idPedidoOk, errors, body){
+async function errorHandlingRequest(destiny, resource, idHost, idTray, errors, body){
   return new Promise(async (resolve, reject) => {
       let errorsDB = JSON.parse(fs.readFileSync(pathErrorsDB))
 
@@ -155,7 +151,7 @@ async function errorHandlingRequest(destiny, resource, idHost, idPedidoOk, error
 
       errorsDB[destiny][idHost] = {
         "typeRequest": resource,
-        "idPedidoOk": idPedidoOk,
+        "idTray": idTray,
         "timeRequest": dataFormatada,
         "returnRequest": errors,
         "bodyRequest": body
@@ -188,8 +184,8 @@ async function deleteErrorsRecords(){
     let errorsDB = JSON.parse(fs.readFileSync(pathErrorsDB));
 
     errorsDB.product = {}
-    errorsDB.customer = {}
-    errorsDB.sale = {}
+    errorsDB.category = {}
+    errorsDB.subategory = {}
 
     fs.writeFileSync(pathErrorsDB, JSON.stringify(errorsDB), 'utf-8');
     gravarLog('RESETADO BANCO DE ERROS')
@@ -223,7 +219,7 @@ async function returnProductIdHostFromIdPed(idProductPed){
     for (const idProductHost in productsDB) {
       if (productsDB.hasOwnProperty(idProductHost)) {
           const product = productsDB[idProductHost];
-          if (product.idPedidoOk == idProductPed) {
+          if (product.idTray == idProductPed) {
               resolve(idProductHost) 
           }
       }

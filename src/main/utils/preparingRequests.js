@@ -82,52 +82,51 @@ async function preparingUndeleteProduct(idproduct, idHost){
 }
 
 
-async function preparingPostCategory(){
+async function preparingPostCategory(category){
     return new Promise(async (resolve, reject) => {
-        let body, infosTray;
+        let infosTray;
+        let body = {
+            "Category": {
+                "name": category
+              }
+          }
 
         await returnURLandAccessToken()
         .then(async (response) => {
             infosTray = response;
-
-            return product
         })
-        .then(async (response) => {
-            body = response
-            await registerCategory(infosTray[0], infosTray[1])
+        .then(async () => {
+            await registerCategory(infosTray[0], infosTray[1], body, 'category', category)
+            .then((id) => {
+                resolve(id)
+            })
         }) 
-        .then(() => {
-            resolve()
-        })
-
     })  
 }
 
 
-async function preparingPostSubCategory(){
+async function preparingPostSubCategory(category, subcategory, category_id){
     return new Promise(async (resolve, reject) => {
-        let body, header;
+        let infosTray;
+        let body = {
+            "Category": {
+                "name": subcategory,
+                "parent_id": category_id
+              }
+          }
 
-        await returnHeader()
+        await returnURLandAccessToken()
         .then(async (response) => {
-            header = response;
-            product.id_parceiro  = await returnValueFromJson('idparceiro')
-
-            delete product.status
-            return product
+            infosTray = response;
         })
-        .then(async (response) => {
-            body = response
-            await postProduct(body, header)
+        .then(async () => {
+            await registerCategory(infosTray[0], infosTray[1], body, 'subcategory', category)
+            .then((id) => {
+                resolve(id)
+            })
         }) 
-        .then(() => {
-            resolve()
-        })
-
     })  
 }
-
-
 
 
 async function returnURLandAccessToken(){
@@ -156,4 +155,6 @@ module.exports = {
     preparingUpdateProduct,
     preparingDeleteProduct,
     preparingUndeleteProduct,
+    preparingPostCategory,
+    preparingPostSubCategory
 }

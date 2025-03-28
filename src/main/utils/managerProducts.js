@@ -4,6 +4,8 @@ const path = require('node:path')
 const { app } = require('electron')
 
 const { preparingPostProduct , preparingUpdateProduct, preparingDeleteProduct, preparingUndeleteProduct } = require('./preparingRequests.js');
+const { returnCategoryId } = require('./managerCategories.js');
+
 
 //const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
 const userDataPath = 'src/build';
@@ -72,22 +74,30 @@ async function readingAllRecordProducts(productsRecords, index){
                     "name": record.PRODUTO,
                     "description": record.DESCRICAO_COMPLEMENTAR,
                     "description_small": record.OBS,
-                    "price": parseFloat((record.VALOR_VENDA).replace(',', '.')).toFixed(2),
-                    "cost_price": parseFloat((record.CUSTO).replace(',', '.')).toFixed(2),
+                    "price": parseFloat(String(record.VALOR_VENDA ?? '').replace(',', '.')).toFixed(2),
+                    "cost_price": parseFloat(String(record.CUSTO ?? '').replace(',', '.')).toFixed(2),
                     "brand": record.MARCA,
                     "stock": parseInt(record.ESTOQUE),
-                    "category_id": null,
-                    "available": record.STATUS == 'ATIVO' ? 1 : 0
+                    "available": ((record.STATUS=='ATIVO')&&(parseInt(record.ESTOQUE)>0))? 1 : 0
                 }
             }
-    
+            
+            await returnCategoryId(record.GRUPO, record.SUBGRUPO)
+            .then( (idCategory) => {
+                product.Product.category_id = idCategory
+                console.log(product.Product)
+            })
+            .then(() => {
+                
+            })
+            /*
             registerOrUpdateProduct(product)
             .then(async() => {
                 await readingAllRecordProducts(productsRecords, i)
                 .then(() => {
                     resolve()
                 })
-            })
+            })*/
         }
 
     })

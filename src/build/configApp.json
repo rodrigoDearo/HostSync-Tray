@@ -3,7 +3,9 @@
     "pathdb": "C:/TSD/Host"
   },
   "tray": {
-    "url": "https://www.drsistemas.com",
-    "code": "dsa58gnvccc887624dsafg"
+    "url": "https://1225878.commercesuite.com.br/web_api",
+    "code": "dsa58gnvccc887624dsafg",
+    "access_token": "APP_ID-5785-STORE_ID-1225878-27884284ffcad16ce8765bd06ac71cf524cab8b23c2f3f68910fb9d87e30723a",
+    "refresh_token": ""
   }
 }

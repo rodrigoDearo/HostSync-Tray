@@ -7,7 +7,7 @@ function registerProduct(url, access_token, body){
     return new Promise(async (resolve, reject) => {
         await axios.post(`${url}/products?access_token=${access_token}`, body)
         .then(async (answer) => {
-            await succesHandlingRequests('product', 'post', body.codigo, answer.data.id)
+            await succesHandlingRequests('product', 'post', body.codigo, answer.data.id, null)
         })
         .catch(async (error) => {
             await errorHandlingRequest('product', 'POST', body.codigo, null, error.response.data.causes, body)
@@ -23,7 +23,7 @@ function updateProduct(url, access_token, body, idproduct, idHost){
     return new Promise(async (resolve, reject) => {
         await axios.put(`${url}/products/${idproduct}?access_token=${access_token}`, body)
         .then(async (response) => {
-            await succesHandlingRequests('product', 'update', idHost, idproduct)
+            await succesHandlingRequests('product', 'update', idHost, idproduct, null)
         })
         .catch(async (error) => {
             await errorHandlingRequest('product', 'PUT', idHost, idproduct, error.response.data.causes, body)
@@ -39,7 +39,7 @@ function deleteProduct(url, access_token, body, idproduct, idHost){
     return new Promise(async (resolve, reject) => {
         await axios.put(`${url}/products/${idproduct}?access_token=${access_token}`, body)
         .then(async () => {
-            await succesHandlingRequests('product', 'delete', idHost, idproduct)
+            await succesHandlingRequests('product', 'delete', idHost, idproduct, null)
         })
         .catch(async (error) => {
             await errorHandlingRequest('product', 'DELETE', idHost, idproduct, error.response.data.causes, body)
@@ -55,7 +55,7 @@ function undeleteProduct(url, access_token, body, idproduct, idHost){
     return new Promise(async (resolve, reject) => {
         await axios.put(`${url}/products/${idproduct}?access_token=${access_token}`, body)
         .then(async (response) => {
-            await succesHandlingRequests('product', 'undelete', idHost, idproduct)
+            await succesHandlingRequests('product', 'undelete', idHost, idproduct, null)
         })
         .catch(async (error) => {
             await errorHandlingRequest('product', 'UNDELETE', idHost, idproduct, error.response.data.causes, body)
@@ -70,19 +70,19 @@ function undeleteProduct(url, access_token, body, idproduct, idHost){
 // ---------------------------------------------------------------------
 
 
-function registerCategory(url, access_token, body, type){
+function registerCategory(url, access_token, body, type, category){
     return new Promise(async (resolve, reject) => {
         await axios.post(`${url}/categories?access_token=${access_token}`, body)
         .then(async (answer) => {
-            console.log(answer)
-            await succesHandlingRequests(type, 'post', body.Category.name, answer.data.id)
+            console.log(answer.data)
+            await succesHandlingRequests(type, 'post', body.Category.name, answer.data.id, [body.Category.name, category])
             .then(async () => {
                 resolve(answer.data.id)
             })
         })
         .catch(async (error) => {
-            console.log(error)
-            await errorHandlingRequest('category', 'POST', body.Category.name, null, error.response.data.causes, body)
+            console.log(error.response.data)
+            await errorHandlingRequest(type, 'POST', body.Category.name, null, error.response.data.causes, body)
             .then(() => {
                 resolve()
             })

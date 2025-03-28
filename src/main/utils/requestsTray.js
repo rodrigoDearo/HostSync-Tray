@@ -3,14 +3,14 @@ const { succesHandlingRequests, errorHandlingRequest, } = require('./auxFunction
 
 
 
-function registerProduct(url, access_token, body){
+function registerProduct(url, access_token, body, idHost){
     return new Promise(async (resolve, reject) => {
         await axios.post(`${url}/products?access_token=${access_token}`, body)
         .then(async (answer) => {
-            await succesHandlingRequests('product', 'post', body.codigo, answer.data.id, null)
+            await succesHandlingRequests('product', 'post', idHost, answer.data.id, null)
         })
         .catch(async (error) => {
-            await errorHandlingRequest('product', 'POST', body.codigo, null, error.response.data.causes, body)
+            await errorHandlingRequest('product', 'POST', idHost, null, error.response.data.causes, body)
         })
         .finally(() => {
             resolve()

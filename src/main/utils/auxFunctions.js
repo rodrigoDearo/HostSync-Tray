@@ -94,7 +94,7 @@ async function succesHandlingRequests(destiny, resource, idHost, idTray, othersI
       }
 
       fs.writeFileSync(pathProducts, JSON.stringify(productsDB), 'utf-8')
-      gravarLog('Gravado registro no banco de ' + destiny);
+      gravarLog('Gravado/Atualizado registro no banco de ' + destiny);
       resolve()
     }else
     if(destiny=="category"){
@@ -115,7 +115,7 @@ async function succesHandlingRequests(destiny, resource, idHost, idTray, othersI
       }
       
       fs.writeFileSync(pathCategories, JSON.stringify(categoriesDB), 'utf-8')
-      gravarLog('Gravado registro no banco de ' + destiny);
+      gravarLog('Gravado/Atualizado registro no banco de ' + destiny);
       resolve()
     }else
     if(destiny=="subcategory"){
@@ -134,7 +134,7 @@ async function succesHandlingRequests(destiny, resource, idHost, idTray, othersI
       }
       
       fs.writeFileSync(pathCategories, JSON.stringify(categoriesDB), 'utf-8')
-      gravarLog('Gravado registro no banco de ' + destiny);
+      gravarLog('Gravado/Atualizado registro no banco de ' + destiny);
       resolve()
     }
   })
@@ -158,7 +158,7 @@ async function errorHandlingRequest(destiny, resource, idHost, idTray, errors, b
       }
 
       fs.writeFileSync(pathErrorsDB, JSON.stringify(errorsDB), 'utf-8');
-      gravarLog('Gravado registro no banco de erros')
+      gravarLog('Gravado/Atualizado registro no banco de erros')
       resolve()
   })
 }

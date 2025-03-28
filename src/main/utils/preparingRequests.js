@@ -4,82 +4,105 @@ const { returnInfo } = require('../envManager');
 
 async function preparingPostProduct(product){
     return new Promise(async (resolve, reject) => {
-        let body, header;
+        let body, infosTray;
 
-        await returnHeader()
+        await returnURLandAccessToken()
         .then(async (response) => {
-            header = response;
+            infosTray = response;
+            body = product
         })
-        .then(async (response) => {
-            body = response
-            await postProduct(body, header)
+        .then(async () => {
+            let idHost = body.Product.codigo
+            delete body.Product.codigo
+            await registerProduct(infosTray[0], infosTray[1], body, idHost)
+            .then(() => {
+                resolve();
+            })
         }) 
-        .then(() => {
-            resolve()
-        })
-
     })  
 }
 
 
 async function preparingUpdateProduct(product, idproduct){
     return new Promise(async (resolve, reject) => {
-        let body, header, idHost;
+        let body, infosTray;
 
-        await returnHeader()
+        await returnURLandAccessToken()
         .then(async (response) => {
-            header = response;
-            idHost = product.codigo;
-
-            delete product.embalagem
-            delete product.status
-            return product
-        })
-        .then(async (response) => {
-            body = response
-            await patchProduct(body, header, idproduct, idHost);
-        })
-        .then(() => {
-            resolve()
-        })
-    })
-}
-
-
-async function preparingDeleteProduct(idproduct, idHost){
-    return new Promise(async (resolve, reject) => {
-        let header;
-
-        await returnHeader()
-        .then(async (response) => {
-            header = response
+            infosTray = response;
+            body = product
         })
         .then(async () => {
-            await deleteProduct(header, idproduct, idHost)
-        })
-        .then(() => {
-            resolve()
-        })
+            let idHost = body.Product.codigo
+            delete body.Product.codigo
+            await updateProduct(infosTray[0], infosTray[1], body, idproduct, idHost)
+            .then(() => {
+                resolve();
+            })
+        }) 
     })
 }
 
 
-async function preparingUndeleteProduct(idproduct, idHost){
+async function preparingDeleteProduct(product, idproduct){
     return new Promise(async (resolve, reject) => {
-        let header;
+        let body, infosTray;
 
-        await returnHeader()
+        await returnURLandAccessToken()
         .then(async (response) => {
-            header = response
+            infosTray = response;
+            body = product
         })
         .then(async () => {
-            await undeleteProduct(header, idproduct, idHost)
-        })
-        .then(() => {
-            resolve()
-        })
+            let idHost = body.Product.codigo
+            delete body.Product.codigo
+            delete body.Product.ean
+            delete body.Product.name
+            delete body.Product.description
+            delete body.Product.description_small
+            delete body.Product.price
+            delete body.Product.cost_price
+            delete body.Product.brand
+            delete body.Product.category_id
+            await deleteProduct(infosTray[0], infosTray[1], body, idproduct, idHost)
+            .then(() => {
+                resolve();
+            })
+        }) 
     })
 }
+
+
+async function preparingUndeleteProduct(product, idproduct){
+    return new Promise(async (resolve, reject) => {
+        let body, infosTray;
+
+        await returnURLandAccessToken()
+        .then(async (response) => {
+            infosTray = response;
+            body = product
+        })
+        .then(async () => {
+            let idHost = body.Product.codigo
+            delete body.Product.codigo
+            delete body.Product.ean
+            delete body.Product.name
+            delete body.Product.description
+            delete body.Product.description_small
+            delete body.Product.price
+            delete body.Product.cost_price
+            delete body.Product.brand
+            delete body.Product.category_id
+            await undeleteProduct(infosTray[0], infosTray[1], body, idproduct, idHost)
+            .then(() => {
+                resolve();
+            })
+        }) 
+    })
+}
+
+
+//
 
 
 async function preparingPostCategory(category){
@@ -97,8 +120,8 @@ async function preparingPostCategory(category){
         })
         .then(async () => {
             await registerCategory(infosTray[0], infosTray[1], body, 'category', category)
-            .then((id) => {
-                resolve(id)
+            .then(() => {
+                resolve();
             })
         }) 
     })  
@@ -121,8 +144,8 @@ async function preparingPostSubCategory(category, subcategory, category_id){
         })
         .then(async () => {
             await registerCategory(infosTray[0], infosTray[1], body, 'subcategory', category)
-            .then((id) => {
-                resolve(id)
+            .then(() => {
+                resolve();
             })
         }) 
     })  

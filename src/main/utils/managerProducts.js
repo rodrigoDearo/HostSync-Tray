@@ -64,12 +64,13 @@ async function readingAllRecordProducts(productsRecords, index){
         let record = productsRecords[index]
         let i = index + 1;
 
-        if(i == productsRecords.length){
+        if(i > productsRecords.length){
             resolve()
         }
         else{
             let product = {
                 "Product": {
+                    "codigo": record.ID_PRODUTO,
                     "ean": record.BARRAS,
                     "name": record.PRODUTO,
                     "description": record.DESCRICAO_COMPLEMENTAR,
@@ -83,21 +84,17 @@ async function readingAllRecordProducts(productsRecords, index){
             }
             
             await returnCategoryId(record.GRUPO, record.SUBGRUPO)
-            .then( (idCategory) => {
-                product.Product.category_id = idCategory
-                console.log(product.Product)
+            .then(async (idCategory) => {
+                product.Product.category_id	= idCategory
+                await registerOrUpdateProduct(product)
             })
-            .then(() => {
-                
-            })
-            /*
-            registerOrUpdateProduct(product)
             .then(async() => {
                 await readingAllRecordProducts(productsRecords, i)
                 .then(() => {
                     resolve()
                 })
-            })*/
+            })
+
         }
 
     })
@@ -108,43 +105,43 @@ async function registerOrUpdateProduct(product){
     return new Promise(async (resolve, reject) => {
         let productsDB = JSON.parse(fs.readFileSync(pathProducts))
 
-        var productAlreadyRegister = productsDB[`${product.codigo}`] ? true : false;
-        var productIsActiveOnHost = product.status == 'ATIVO' ? true : false;
+        var productAlreadyRegister = productsDB[`${product.Product.codigo}`] ? true : false;
+        var productIsActiveOnHost = product.Product.available == 1 ? true : false;
 
-        const functionReturnStatusOnPedOk = () => {if(productAlreadyRegister){ return productsDB[`${product.codigo}`].status }else{return null}}
-        const functionReturnIdProductOnPedOk = () => {if(productAlreadyRegister){ return productsDB[`${product.codigo}`].idPedidoOk }else{return null}}
+        const functionReturnStatusOnTray = () => {if(productAlreadyRegister){ return productsDB[`${product.Product.codigo}`].status }else{return null}}
+        const functionReturnIdProductOnTray = () => {if(productAlreadyRegister){ return productsDB[`${product.Product.codigo}`].idTray }else{return null}}
         
-        var statusProductOnPedidoOk = await functionReturnStatusOnPedOk()
+        var statusProductOnTray = await functionReturnStatusOnTray()
 
-        var productIsActiveOnPedidoOK =  statusProductOnPedidoOk == 'ATIVO' ? true : false;
-        var idProductOnPedidoOk = functionReturnIdProductOnPedOk()
+        var productIsActiveOnTray =  statusProductOnTray == 'ATIVO' ? true : false;
+        var idProductOnTray = functionReturnIdProductOnTray()
 
         if(!productAlreadyRegister&&productIsActiveOnHost){
             await preparingPostProduct(product)
             .then(() => {
-                resolve()
+                resolve();
             })
         }else
         if(!productAlreadyRegister&&(!productIsActiveOnHost)){
             resolve()
         }else
         if(productAlreadyRegister&&productIsActiveOnHost){
-            if(productIsActiveOnPedidoOK){
-                await preparingUpdateProduct(product, idProductOnPedidoOk)
+            if(productIsActiveOnTray){
+                await preparingUpdateProduct(product, idProductOnTray)
                 .then(() => {
                     resolve()
                 })
             }
             else{
-                await preparingUndeleteProduct(idProductOnPedidoOk, product.codigo)
+                await preparingUndeleteProduct(product, idProductOnTray)
                 .then(() => {
                     resolve()
                 })
             }
         }else
         if(productAlreadyRegister&&(!productIsActiveOnHost)){
-            if(productIsActiveOnPedidoOK){
-                await preparingDeleteProduct(idProductOnPedidoOk, product.codigo)
+            if(productIsActiveOnTray){
+                await preparingDeleteProduct(product, idProductOnTray)
                 .then(() => {
                     resolve()
                 })

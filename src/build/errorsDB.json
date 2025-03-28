@@ -1,1 +1,1 @@
-{"product":{},"category":{},"subcategory":{"DESCOLADO":{"typeRequest":"POST","idTray":null,"timeRequest":"2025-3-28","returnRequest":{"Category":{"parent_id":["Invalid parameter parent_id."]}},"bodyRequest":{"Category":{"name":"DESCOLADO","parent_id":"700787"}}}},"subategory":{}}
+{"product":{},"category":{},"subcategory":{},"subategory":{}}

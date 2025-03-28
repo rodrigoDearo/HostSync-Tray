@@ -1,1 +1,17 @@
-{"1":{"idTray":"1407534087","status":"INATIVO","variations":{}},"2":{"idTray":"1407534089","status":"INATIVO","variations":{}}}
+{
+    "1": {
+        "idTray": "1407534087",
+        "status": "ATIVO",
+        "variations": {}
+    },
+    "2": {
+        "idTray": "1407534089",
+        "status": "ATIVO",
+        "variations": {}
+    },
+    "3": {
+        "idTray": "1407534091",
+        "status": "ATIVO",
+        "variations": {}
+    }
+}

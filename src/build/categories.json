@@ -1,1 +1,18 @@
-{"MEXICANO":{"idTray":"700807","subCategories":{"DESCOLADO":"700809"}}}
+{
+    "MEXICANO": {
+        "idTray": "700807",
+        "subCategories": {
+            "DESCOLADO": "700809"
+        }
+    },
+    "BRASILEIRO": {
+        "idTray": "700811",
+        "subCategories": {}
+    },
+    "CANADENSE": {
+        "idTray": "700813",
+        "subCategories": {
+            "REGIONAL": "700815"
+        }
+    }
+}

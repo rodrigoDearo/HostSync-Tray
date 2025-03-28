@@ -56,14 +56,6 @@ async function preparingDeleteProduct(product, idproduct){
         .then(async () => {
             let idHost = body.Product.codigo
             delete body.Product.codigo
-            delete body.Product.ean
-            delete body.Product.name
-            delete body.Product.description
-            delete body.Product.description_small
-            delete body.Product.price
-            delete body.Product.cost_price
-            delete body.Product.brand
-            delete body.Product.category_id
             await deleteProduct(infosTray[0], infosTray[1], body, idproduct, idHost)
             .then(() => {
                 resolve();
@@ -85,14 +77,6 @@ async function preparingUndeleteProduct(product, idproduct){
         .then(async () => {
             let idHost = body.Product.codigo
             delete body.Product.codigo
-            delete body.Product.ean
-            delete body.Product.name
-            delete body.Product.description
-            delete body.Product.description_small
-            delete body.Product.price
-            delete body.Product.cost_price
-            delete body.Product.brand
-            delete body.Product.category_id
             await undeleteProduct(infosTray[0], infosTray[1], body, idproduct, idHost)
             .then(() => {
                 resolve();
@@ -120,8 +104,8 @@ async function preparingPostCategory(category){
         })
         .then(async () => {
             await registerCategory(infosTray[0], infosTray[1], body, 'category', category)
-            .then(() => {
-                resolve();
+            .then((id) => {
+                resolve(id ?? null)
             })
         }) 
     })  
@@ -144,8 +128,8 @@ async function preparingPostSubCategory(category, subcategory, category_id){
         })
         .then(async () => {
             await registerCategory(infosTray[0], infosTray[1], body, 'subcategory', category)
-            .then(() => {
-                resolve();
+            .then((id) => {
+                resolve(id ?? null)
             })
         }) 
     })  

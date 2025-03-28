@@ -74,14 +74,12 @@ function registerCategory(url, access_token, body, type, category){
     return new Promise(async (resolve, reject) => {
         await axios.post(`${url}/categories?access_token=${access_token}`, body)
         .then(async (answer) => {
-            console.log(answer.data)
             await succesHandlingRequests(type, 'post', body.Category.name, answer.data.id, [body.Category.name, category])
             .then(async () => {
                 resolve(answer.data.id)
             })
         })
         .catch(async (error) => {
-            console.log(error.response.data)
             await errorHandlingRequest(type, 'POST', body.Category.name, null, error.response.data.causes, body)
             .then(() => {
                 resolve()

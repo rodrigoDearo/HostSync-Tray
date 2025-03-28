@@ -5,9 +5,7 @@ const { saveInfos, returnValueFromJson } = require('./utils/manageInfoUser.js')
 const { createDependencies, limparTabela } = require('./utils/dependenciesFDB.js')
 const { copyJsonFilesToUserData, returnConfigToAccessDB, gravarLog, deleteErrorsRecords } = require('./utils/auxFunctions.js')
 const { requireAllProducts } = require('./utils/managerProducts.js')
-const { requireAllCustomers } = require('./utils/managerCustomers.js')
 const { readNewRecords } = require('./utils/managerHostTableNotify.js')
-const { managementRequestsSales } = require('./utils/managerSales.js')
 
 var win;
 
@@ -120,7 +118,7 @@ async function mainProcess(){
       if(mensageReturn.code == 500){
         reject(mensageReturn)
       }
-    })
+    })/*
     .then(async () => {
       let mensageReturn = await requireAllProducts(config)
       if(mensageReturn.code == 500){
@@ -128,25 +126,13 @@ async function mainProcess(){
       }
     })
     .then(async () => {
-      let mensageReturn = await requireAllCustomers(config)
-      if(mensageReturn.code == 500){
-        reject(mensageReturn)
-      }
-    }) 
-    .then(async () => {
       setInterval(async () => {
         await readNewRecords(config)
         .then(async () => {
-            await managementRequestsSales(config)
+
         })
-        .then(() => {
-          gravarLog('---------------------------------------------------------------------')
-          gravarLog('REALIZADO A LEITURA PERIODICA DA TABELA DE NOTIFICACOES E DAS VENDAS')
-          gravarLog('---------------------------------------------------------------------')
-        })
-      
       }, 600000);
-    })
+    })*/
   })
 }
 

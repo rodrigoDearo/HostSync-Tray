@@ -1,7 +1,6 @@
 const conexao = require('node-firebird');
 
 const { readingAllRecordProducts } = require('./managerProducts.js')
-const { readingAllRecordCustomers } = require('./managerCustomers.js')
 const { limparTabela } = require('./dependenciesFDB.js');
 const { gravarLog } = require("./auxFunctions.js");
 

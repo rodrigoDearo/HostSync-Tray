@@ -6,7 +6,8 @@ const { returnInfo } = require('../envManager');
 const { returnValueFromJson } = require('./manageInfoUser');
 const { error } = require('node:console');
 
-const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
+//const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
+const userDataPath = 'src/build';
 const pathLog = path.join(userDataPath, 'logs');
 const pathConfigApp = path.join(userDataPath, 'configApp.json');
 const pathProducts = path.join(userDataPath, 'products.json');
@@ -60,17 +61,6 @@ function gravarLog(mensagem) {
           console.log('Log gravado com sucesso!');
       }
   });
-}
-  
-
-
-async function incrementIdRequestPost(){
-  return new Promise(async (resolve, reject) => {
-    const configApp = JSON.parse(fs.readFileSync(pathConfigApp, 'utf-8'));
-    configApp.pedidoOk.idRequestPost++;
-    fs.writeFileSync(pathConfigApp, JSON.stringify(configApp), 'utf-8')
-    resolve()
-  })
 }
 
 
@@ -155,21 +145,6 @@ async function succesHandlingRequests(destiny, resource, idHost, idPedOk){
 }
 
 
-
-async function updateDatetimeOfLastRequest(dateTime){
-  return new Promise(async (resolve, reject) => {
-      let appDB = JSON.parse(fs.readFileSync(pathConfigApp));
-
-      appDB.pedidoOk.last_request = dateTime;
-
-      fs.writeFileSync(pathConfigApp, JSON.stringify(appDB), 'utf-8');
-      gravarLog('Atualizado registro da ultima request no banco')
-      resolve()
-  })
-}
-
-
-
 async function errorHandlingRequest(destiny, resource, idHost, idPedidoOk, errors, body){
   return new Promise(async (resolve, reject) => {
       let errorsDB = JSON.parse(fs.readFileSync(pathErrorsDB))
@@ -240,23 +215,7 @@ async function getActualDatetime(){
 }
 
 
-async function returnCustomerIdHostFromIdPed(idCustomerPed){
-  return new Promise(async (resolve, reject) => {
-      let customersDB = JSON.parse(fs.readFileSync(pathCustomers))
-
-    for (const idCustomerHost in customersDB) {
-      if (customersDB.hasOwnProperty(idCustomerHost)) {
-          const customer = customersDB[idCustomerHost];
-          if (customer.idPedidoOk == idCustomerPed) {
-              resolve(idCustomerHost) 
-          }
-      }
-    }
-    return null;
-  })
-}
-
-
+/*
 async function returnProductIdHostFromIdPed(idProductPed){
   return new Promise(async (resolve, reject) => {
     let productsDB = JSON.parse(fs.readFileSync(pathProducts))
@@ -272,7 +231,7 @@ async function returnProductIdHostFromIdPed(idProductPed){
 
     return null;
   })
-}
+}*/
 
 
 function copyJsonFilesToUserData() {
@@ -315,13 +274,10 @@ function copyJsonFilesToUserData() {
 module.exports = {
     copyJsonFilesToUserData,
     returnConfigToAccessDB,
-    incrementIdRequestPost,
     succesHandlingRequests,
-    updateDatetimeOfLastRequest,
     errorHandlingRequest,
     deleteErrorsRecords,
     getActualDatetime,
-    returnCustomerIdHostFromIdPed,
-    returnProductIdHostFromIdPed,
+   // returnProductIdHostFromIdPed,
     gravarLog
 }

@@ -1,8 +1,8 @@
 const { app } = require('electron')
 const path = require('node:path')
 
-const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
-
+//const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
+const userDataPath = 'src/build';
 require('dotenv').config({ path: path.join(userDataPath, '.env') });
 
 function returnInfo(infoRequired){
@@ -16,8 +16,20 @@ function returnInfo(infoRequired){
                 resolve(process.env.PSW_DATABASE) 
                 break;
 
-            case 'token_partner':
-                resolve(process.env.TOKEN_PARTNER) 
+            case 'consumer_key':
+                resolve(process.env.CSM_KEY) 
+                break;
+            
+            case 'consumer_secret':
+                resolve(process.env.CSM_SECRET) 
+                break;
+
+            case 'access_token':
+                resolve(process.env.ACS_TOKEN) 
+                break;
+
+            case 'refresh_token':
+                resolve(process.env.RFS_TOKEN) 
                 break;
         }
     })

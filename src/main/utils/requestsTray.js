@@ -1,7 +1,68 @@
 const axios = require('axios');
 const { succesHandlingRequests, errorHandlingRequest, } = require('./auxFunctions')
 
-function postProduct(body, header){
+
+
+function registerCategory(body, header){
+    return new Promise(async (resolve, reject) => {
+        await axios.post('https://api.pedidook.com.br/v1/clientes/', body, header)
+        .then(async (answer) => {
+            await succesHandlingRequests('category', 'post', body.codigo, answer.data.cliente.id)
+        })
+        .catch(async (error) => {
+            if(error.response.data.erros[0].codigo==24){
+                reject({code:24})
+            }
+            else{
+                await errorHandlingRequest('category', 'POST', body.codigo, null, error.response.data.erros, body)
+                .then(() => {
+                    resolve()
+                })
+            }
+        })
+        .finally(() => {
+            resolve()
+        })    
+    })
+}
+
+
+function updateCategory(body, header, idcustomer, idHost){
+    return new Promise(async (resolve, reject) => {
+        await axios.put(`https://api.pedidook.com.br/v1/clientes/${idcustomer}`, body, header)
+        .then(async() => {
+            await succesHandlingRequests('category', 'put', idHost, idcustomer)
+        })
+        .catch(async (error) => {
+            await errorHandlingRequest('category', 'PUT', idHost, idcustomer, error.response.data.erros, body)
+        })
+        .finally(() => {
+            resolve()
+        })    
+    })
+}
+
+
+function deleteCategory(header, idcustomer, idHost){
+    return new Promise(async (resolve, reject) => {
+        await axios.delete(`https://api.pedidook.com.br/v1/clientes/${idcustomer}`, header)
+        .then(async () => {
+            await succesHandlingRequests('category', 'delete', idHost, idcustomer)
+        })
+        .catch(async (error) => {
+            await errorHandlingRequest('category', 'DELETE', idHost, idcustomer, error.response.data.erros, null)
+        })
+        .finally(() => {
+            resolve()
+        })    
+    })
+}
+
+
+// ---------------------------------------------------------------------
+
+
+function registerProduct(body, header){
     return new Promise(async (resolve, reject) => {
         await axios.post('https://api.pedidook.com.br/v1/produtos/', body, header)
         .then(async (answer) => {
@@ -22,7 +83,7 @@ function postProduct(body, header){
 }
 
 
-function patchProduct(body, header, idproduct, idHost){
+function updateProduct(body, header, idproduct, idHost){
     return new Promise(async (resolve, reject) => {
         await axios.patch(`https://api.pedidook.com.br/v1/produtos/${idproduct}`, body, header)
         .then(async (response) => {
@@ -73,18 +134,18 @@ function undeleteProduct(header, idproduct, idHost){
 // ---------------------------------------------------------------------
 
 
-function postCustomer(body, header){
+function registerVariation(body, header){
     return new Promise(async (resolve, reject) => {
         await axios.post('https://api.pedidook.com.br/v1/clientes/', body, header)
         .then(async (answer) => {
-            await succesHandlingRequests('customer', 'post', body.codigo, answer.data.cliente.id)
+            await succesHandlingRequests('variation', 'post', body.codigo, answer.data.cliente.id)
         })
         .catch(async (error) => {
             if(error.response.data.erros[0].codigo==24){
                 reject({code:24})
             }
             else{
-                await errorHandlingRequest('customer', 'POST', body.codigo, null, error.response.data.erros, body)
+                await errorHandlingRequest('variation', 'POST', body.codigo, null, error.response.data.erros, body)
                 .then(() => {
                     resolve()
                 })
@@ -97,14 +158,14 @@ function postCustomer(body, header){
 }
 
 
-function patchCustomer(body, header, idcustomer, idHost){
+function updateVariation(body, header, idcustomer, idHost){
     return new Promise(async (resolve, reject) => {
         await axios.put(`https://api.pedidook.com.br/v1/clientes/${idcustomer}`, body, header)
         .then(async() => {
-            await succesHandlingRequests('customer', 'put', idHost, idcustomer)
+            await succesHandlingRequests('variation', 'put', idHost, idcustomer)
         })
         .catch(async (error) => {
-            await errorHandlingRequest('customer', 'PUT', idHost, idcustomer, error.response.data.erros, body)
+            await errorHandlingRequest('variation', 'PUT', idHost, idcustomer, error.response.data.erros, body)
         })
         .finally(() => {
             resolve()
@@ -113,14 +174,14 @@ function patchCustomer(body, header, idcustomer, idHost){
 }
 
 
-function deleteCustomer(header, idcustomer, idHost){
+function deleteVariation(header, idcustomer, idHost){
     return new Promise(async (resolve, reject) => {
         await axios.delete(`https://api.pedidook.com.br/v1/clientes/${idcustomer}`, header)
         .then(async () => {
-            await succesHandlingRequests('customer', 'delete', idHost, idcustomer)
+            await succesHandlingRequests('variation', 'delete', idHost, idcustomer)
         })
         .catch(async (error) => {
-            await errorHandlingRequest('customer', 'DELETE', idHost, idcustomer, error.response.data.erros, null)
+            await errorHandlingRequest('variation', 'DELETE', idHost, idcustomer, error.response.data.erros, null)
         })
         .finally(() => {
             resolve()
@@ -129,50 +190,19 @@ function deleteCustomer(header, idcustomer, idHost){
 }
 
 
-function undeleteCustomer(header, idcustomer, idHost){
-    return new Promise(async (resolve, reject) => {
-        await axios.patch(`https://api.pedidook.com.br/v1/clientes/${idcustomer}/undelete`, '', header)
-        .then(async (response) => {
-            await succesHandlingRequests('customer', 'undelete', idHost, idcustomer)
-        })
-        .catch(async (error) => {
-            await errorHandlingRequest('customer', 'UNDELETE', idHost, idcustomer, error.response.data.erros, null)
-        })
-        .finally(() => {
-            resolve()
-        })    
-    })
-}
 
-
-// ---------------------------------------------------------------------
-
-
-function getSales(dateTime, page, header){
-    return new Promise(async (resolve, reject) => {
-        await axios.get(`https://api.pedidook.com.br/v1/pedidos/?alterado_apos=${dateTime}&pagina=${page}&excluido=false`, header)
-        .then((response) => {
-            resolve([response.data.pedidos, response.data.href_proxima_pagina])
-        })
-        .catch(async (error) => {
-            await errorHandlingRequest('sale', 'GET', 0, 0, error.response.data.erros, null)
-        })
-        .finally(() => {
-
-        })    
-    })
-}
 
 
 
 module.exports = {
-    postProduct,
-    patchProduct,
+    registerCategory,
+    updateCategory,
+    deleteCategory,
+    registerProduct,
+    updateProduct,
     deleteProduct,
     undeleteProduct,
-    postCustomer,
-    patchCustomer,
-    deleteCustomer,
-    undeleteCustomer,
-    getSales
+    registerVariation,
+    updateVariation,
+    deleteVariation,
 }

@@ -7,8 +7,8 @@ const { preparingPostVariation, preparingUpdateVariation, preparingDeleteVariati
 const { returnConfigToAccessDB } = require('./auxFunctions.js')
 
 var variationsModificateds = []
-//const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
-const userDataPath = 'src/build';
+const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
+//const userDataPath = 'src/build';
 const pathProducts = path.join(userDataPath, 'products.json');
 
 async function requireAllVariationsOfAProduct(idProduct){
@@ -137,14 +137,20 @@ async function registerUpdateOrDeleteVariant(variant){
 
 async function deleteUnlistedVariations(product, idHost, arrayVariations) {
     return new Promise(async (resolve, reject) => {
-        if (!product || !product.variations) return; // Verifica se há variações no produto
+        let saveProduct = product
 
-        for (const [variation, id] of Object.entries(product.variations)) {
-            if (!arrayVariations.includes(variation)) {
-                await preparingDeleteVariation(id, idHost, variation); // Chama a função com o ID da variação não listada
-            }
+        for(let i=0; i<arrayVariations.length; i++){
+            delete product.variations[`${arrayVariations[i]}`]
         }
 
+        for (const [grade, id] of Object.entries(product.variations)) {
+            setTimeout(async () => {
+                await preparingDeleteVariation(id, idHost, grade)
+            }, 1000);
+        }
+        
+
+        product = saveProduct;
         resolve()
     })
 }

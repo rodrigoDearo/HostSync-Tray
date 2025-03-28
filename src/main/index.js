@@ -32,7 +32,7 @@ app.on('window-all-closed', () => {
 })
 
 app.whenReady().then(() => {
-//  copyJsonFilesToUserData()
+  copyJsonFilesToUserData()
   createWindow()
 
   const icon = path.join(__dirname, 'img/icon.png')
@@ -126,7 +126,7 @@ async function mainProcess(){
       if(mensageReturn.code == 500){
         reject(mensageReturn)
       }
-    })/*
+    })
     .then(async () => {
       setInterval(async () => {
         await readNewRecords(config)
@@ -134,7 +134,7 @@ async function mainProcess(){
 
         })
       }, 600000);
-    })*/
+    })
   })
 }
 

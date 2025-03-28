@@ -6,8 +6,7 @@ const { returnInfo } = require('../envManager');
 const { returnValueFromJson } = require('./manageInfoUser');
 const { error } = require('node:console');
 
-//const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
-const userDataPath = 'src/build';
+const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
 const pathLog = path.join(userDataPath, 'logs');
 const pathConfigApp = path.join(userDataPath, 'configApp.json');
 const pathProducts = path.join(userDataPath, 'products.json');
@@ -265,25 +264,6 @@ async function getActualDatetime(){
 }
 
 
-/*
-async function returnProductIdHostFromIdPed(idProductPed){
-  return new Promise(async (resolve, reject) => {
-    let productsDB = JSON.parse(fs.readFileSync(pathProducts))
-
-    for (const idProductHost in productsDB) {
-      if (productsDB.hasOwnProperty(idProductHost)) {
-          const product = productsDB[idProductHost];
-          if (product.idTray == idProductPed) {
-              resolve(idProductHost) 
-          }
-      }
-    }
-
-    return null;
-  })
-}*/
-
-
 function copyJsonFilesToUserData() {
   // Caminho correto onde os arquivos são empacotados
   const resourcesPath = process.env.PORTABLE_EXECUTABLE_DIR || path.dirname(process.execPath);
@@ -291,8 +271,8 @@ function copyJsonFilesToUserData() {
   const filesToCopy = [
       'configApp.json',
       'products.json',
-      'customers.json',
-      'sales.json',
+      'categories.json',
+      'links_img.json',
       'errorsDB.json',
       '.env'
   ];
@@ -328,6 +308,5 @@ module.exports = {
     errorHandlingRequest,
     deleteErrorsRecords,
     getActualDatetime,
-   // returnProductIdHostFromIdPed,
     gravarLog
 }

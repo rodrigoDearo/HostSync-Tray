@@ -1,11 +1,1 @@
-{
-  "host": {
-    "pathdb": "C:/TSD/Host"
-  },
-  "tray": {
-    "url": "https://1225878.commercesuite.com.br/web_api",
-    "code": "dsa58gnvccc887624dsafg",
-    "access_token": "APP_ID-5785-STORE_ID-1225878-bd80a9b4dc6de80e817fa761b0d8fbcdb429476d871499e6ee4e709928d8130e",
-    "refresh_token": ""
-  }
-}
+{"host":{"pathdb":"C:/TSD/Host"},"tray":{"url":"https://1225878.commercesuite.com.br/web_api","code":"8461cf3d7222eb38e864ccc595a13dee06531b02804797b7303b4bc7af9c3e0e","access_token":"APP_ID-5785-STORE_ID-1225878-fa7e234248a0b1f3e60b277807c938f12c8ca91b50a98279454701000bac9609","refresh_token":"7bdcfc2a848b1e6debce7602dc4c43a22bed84186ef745bcf2f6d6bbafdc52f5"}}

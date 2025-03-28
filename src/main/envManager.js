@@ -24,13 +24,6 @@ function returnInfo(infoRequired){
                 resolve(process.env.CSM_SECRET) 
                 break;
 
-            case 'access_token':
-                resolve(process.env.ACS_TOKEN) 
-                break;
-
-            case 'refresh_token':
-                resolve(process.env.RFS_TOKEN) 
-                break;
         }
     })
 }

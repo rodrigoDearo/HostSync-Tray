@@ -1,7 +1,6 @@
 /* ---------------------- IMPORTAÇÃO DE MÓDULOS ----------------------*/
 const axios = require('axios');
 const { Console } = require('console');
-const { response } = require('express');
 const fs = require('fs');
 const { resolve } = require('path');
 

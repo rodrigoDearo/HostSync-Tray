@@ -14,6 +14,7 @@ const pathProducts = path.join(userDataPath, 'products.json');
 const pathCategories = path.join(userDataPath, 'categories.json');
 const pathErrorsDB = path.join(userDataPath, 'errorsDB.json');
 
+var config;
 
 async function returnConfigToAccessDB(){
     return new Promise(async (resolve, reject) => {
@@ -78,18 +79,21 @@ async function succesHandlingRequests(destiny, resource, idHost, idTray, othersI
             "variations": {}
           }
           await verifyToDeleteErrorRecord(destiny, idHost)
+          gravarLog('Cadastrado registro no banco de ' + destiny);
           break;
 
         case "update":
-          
+          gravarLog('Atualizado registro no banco de ' + destiny);
           break;
 
         case "delete":
           productsDB[`${idHost}`].status = "INATIVO";
+          gravarLog('Deletado registro no banco de ' + destiny);
           break;
 
         case "undelete":
           productsDB[`${idHost}`].status = "ATIVO";
+          gravarLog('Re-Cadastrado registro no banco de ' + destiny);
           break;
       }
 
@@ -106,10 +110,12 @@ async function succesHandlingRequests(destiny, resource, idHost, idTray, othersI
             "idTray": `${idTray}`,
             "subCategories": {}
           }
+          gravarLog('Cadastrado registro no banco de ' + destiny);
           break;
 
         case "delete":
           categoriesDB[`${othersInfo[0]}`].status = "INATIVO";
+          gravarLog('Deletado registro no banco de ' + destiny);
           break;
 
       }
@@ -124,10 +130,12 @@ async function succesHandlingRequests(destiny, resource, idHost, idTray, othersI
       switch (resource) {
         case "post":
           categoriesDB[`${othersInfo[1]}`].subCategories[`${othersInfo[0]}`] = idTray
+          gravarLog('Cadastrado registro no banco de ' + destiny);
           break;
 
         case "delete":
           delete categoriesDB[`${othersInfo[0]}`].subCategories[`${othersInfo[1]}`]
+          gravarLog('Deletado registro no banco de ' + destiny);
           break;
 
 
@@ -136,7 +144,52 @@ async function succesHandlingRequests(destiny, resource, idHost, idTray, othersI
       fs.writeFileSync(pathCategories, JSON.stringify(categoriesDB), 'utf-8')
       gravarLog('Gravado/Atualizado registro no banco de ' + destiny);
       resolve()
+    }else
+    if(destiny=="variation"){
+      let productsDB = JSON.parse(fs.readFileSync(pathProducts))
+
+      switch (resource) {
+        case "post":
+          productsDB[`${idHost}`].variations[`${othersInfo[0]}`] = idTray
+          gravarLog('Cadastrado registro no banco de ' + destiny);
+          break;
+
+        case "delete":
+          gravarLog('Atualizado registro no banco de ' + destiny);
+          break;
+
+        case "delete":
+          delete productsDB[`${idHost}`].variations[`${othersInfo[0]}`]
+          gravarLog('Deletado registro no banco de ' + destiny);
+          break;
+
+
+      }
+      
+      fs.writeFileSync(pathProducts, JSON.stringify(productsDB), 'utf-8')
+      resolve()
+    }else
+    if(destiny=="token"){
+      let configApp = JSON.parse(fs.readFileSync(pathConfigApp))
+
+      switch (resource) {
+        case "post":
+          configApp.tray.access_token = othersInfo[0];
+          configApp.tray.refresh_token = othersInfo[1]
+          gravarLog('Gerado token de acesso');
+          break;
+
+        case "get":
+          configApp.tray.access_token = othersInfo[0];
+          gravarLog('Atualizado token de acesso');
+          break;
+
+      }
+      
+      fs.writeFileSync(pathConfigApp, JSON.stringify(configApp), 'utf-8')
+      resolve()
     }
+    
   })
 }
 
@@ -148,7 +201,6 @@ async function errorHandlingRequest(destiny, resource, idHost, idTray, errors, b
       const data = new Date();
       data.setHours(data.getHours() - 3);
       const dataFormatada = `${data.getFullYear()}-${data.getMonth() + 1}-${data.getDate()}`;
-
       errorsDB[destiny][idHost] = {
         "typeRequest": resource,
         "idTray": idTray,
@@ -185,7 +237,9 @@ async function deleteErrorsRecords(){
 
     errorsDB.product = {}
     errorsDB.category = {}
-    errorsDB.subategory = {}
+    errorsDB.subcategory = {}
+    errorsDB.variant = {}
+    errorsDB.token = {}
 
     fs.writeFileSync(pathErrorsDB, JSON.stringify(errorsDB), 'utf-8');
     gravarLog('RESETADO BANCO DE ERROS')

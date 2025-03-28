@@ -6,7 +6,7 @@ const { createDependencies, limparTabela } = require('./utils/dependenciesFDB.js
 const { copyJsonFilesToUserData, returnConfigToAccessDB, gravarLog, deleteErrorsRecords } = require('./utils/auxFunctions.js')
 const { requireAllProducts } = require('./utils/managerProducts.js')
 const { readNewRecords } = require('./utils/managerHostTableNotify.js')
-
+const { creatingAndUpdateAccessToken } = require('./utils/managerAccessTokenTray.js')
 
 var win;
 
@@ -104,6 +104,7 @@ ipcMain.handle('startProgram', async () => {
 async function mainProcess(){
   return new Promise(async (resolve, reject) => {
     var config;
+    await creatingAndUpdateAccessToken()
 
     await returnConfigToAccessDB()
     .then(async (response) => {

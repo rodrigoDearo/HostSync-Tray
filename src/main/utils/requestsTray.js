@@ -1,5 +1,6 @@
 const axios = require('axios');
-const { succesHandlingRequests, errorHandlingRequest, } = require('./auxFunctions')
+const { succesHandlingRequests, errorHandlingRequest, } = require('./auxFunctions');
+const { refreshToken } = require('../../structures/configTray');
 
 
 
@@ -108,14 +109,14 @@ function deleteCategory(header, idcustomer, idHost){
 // ---------------------------------------------------------------------
 
 
-function registerVariation(body, header){
+function registerVariation(url, access_token, body, idProductHost){
     return new Promise(async (resolve, reject) => {
-        await axios.post('https://api.pedidook.com.br/v1/clientes/', body, header)
+        await axios.post(`${url}/products/variants/?access_token=${access_token}`, body)
         .then(async (answer) => {
-            await succesHandlingRequests('variation', 'post', body.codigo, answer.data.id)
+            await succesHandlingRequests('variation', 'post', idProductHost, answer.data.id, [body.Variant.value_1])
         })
         .catch(async (error) => {
-            await errorHandlingRequest('variation', 'POST', body.codigo, null, error.response.data.causes, body)
+            await errorHandlingRequest('variation', 'POST', idProductHost, null, error.response.data.causes, body)
             .then(() => {
                 resolve()
             })
@@ -127,14 +128,14 @@ function registerVariation(body, header){
 }
 
 
-function updateVariation(body, header, idcustomer, idHost){
+function updateVariation(url, access_token, body, idVariant, idProductHost){
     return new Promise(async (resolve, reject) => {
-        await axios.put(`https://api.pedidook.com.br/v1/clientes/${idcustomer}`, body, header)
+        await axios.put(`${url}/products/variants/${idVariant}?access_token=${access_token}`, body)
         .then(async() => {
-            await succesHandlingRequests('variation', 'put', idHost, idcustomer)
+            await succesHandlingRequests('variation', 'update', idProductHost, idVariant, [body.Variant.value_1])
         })
         .catch(async (error) => {
-            await errorHandlingRequest('variation', 'PUT', idHost, idcustomer, error.response.data.causes, body)
+            await errorHandlingRequest('variation', 'PUT', idProductHost, idVariant, error.response.data.causes, body)
         })
         .finally(() => {
             resolve()
@@ -143,14 +144,14 @@ function updateVariation(body, header, idcustomer, idHost){
 }
 
 
-function deleteVariation(header, idcustomer, idHost){
+function deleteVariation(url, access_token, idVariant, idProductHost, nameVariant){
     return new Promise(async (resolve, reject) => {
-        await axios.delete(`https://api.pedidook.com.br/v1/clientes/${idcustomer}`, header)
+        await axios.delete(`${url}/products/variants/${idVariant}?access_token=${access_token}`)
         .then(async () => {
-            await succesHandlingRequests('variation', 'delete', idHost, idcustomer)
+            await succesHandlingRequests('variation', 'delete', idProductHost, idVariant, [nameVariant])
         })
         .catch(async (error) => {
-            await errorHandlingRequest('variation', 'DELETE', idHost, idcustomer, error.response.data.causes, null)
+            await errorHandlingRequest('variation', 'DELETE', idProductHost, idVariant, error.response.data.causes, null)
         })
         .finally(() => {
             resolve()
@@ -162,7 +163,39 @@ function deleteVariation(header, idcustomer, idHost){
 // ---------------------------------------------------------------------
 
 
+function generateToken(url, body){
+    return new Promise(async (resolve, reject) => {
+        await axios.post(`${url}/auth`, body)
+        .then(async (answer) => {
+            await succesHandlingRequests('token', 'post', null, null, [
+                answer.data.access_token,
+                answer.data.refresh_token
+            ])
+        })
+        .catch(async (error) => {
+            await errorHandlingRequest('token', 'POST', 1, 1, error.response.data.causes, body)
+        })
+        .finally(() => {
+            resolve()
+        })    
+    })
+}
 
+
+function updateToken(url, refresh_token){
+    return new Promise(async (resolve, reject) => {
+        await axios.get(`${url}/auth?refresh_token=${refresh_token}`)
+        .then(async (answer) => {
+            await succesHandlingRequests('token', 'get', null, null, [answer.data.access_token,])
+        })
+        .catch(async (error) => {
+            await errorHandlingRequest('token', 'GET', 1, 1, error.response.data.causes, null)
+        })
+        .finally(() => {
+            resolve()
+        })    
+    })
+}
 
 
 module.exports = { 
@@ -175,4 +208,6 @@ module.exports = {
     registerVariation,
     updateVariation,
     deleteVariation,
+    generateToken,
+    updateToken
 }

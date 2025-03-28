@@ -5,6 +5,7 @@ const { app } = require('electron')
 
 const { preparingPostProduct , preparingUpdateProduct, preparingDeleteProduct, preparingUndeleteProduct } = require('./preparingRequests.js');
 const { returnCategoryId } = require('./managerCategories.js');
+const { requireAllVariationsOfAProduct } = require('./managerVariations.js')
 
 
 //const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
@@ -29,6 +30,7 @@ async function requireAllProducts(config){
                                 M.MARCA,
                                 P.ESTOQUE,
                                 P.STATUS,
+                                P.FOTO,
                                 P.GRADE,
                                 G.GRUPO,
                                 SG.SUBGRUPO
@@ -104,6 +106,7 @@ async function readingAllRecordProducts(productsRecords, index){
 async function registerOrUpdateProduct(product){
     return new Promise(async (resolve, reject) => {
         let productsDB = JSON.parse(fs.readFileSync(pathProducts))
+        let idProductHost = product.Product.codigo;
 
         var productAlreadyRegister = productsDB[`${product.Product.codigo}`] ? true : false;
         var productIsActiveOnHost = product.Product.available == 1 ? true : false;
@@ -118,8 +121,11 @@ async function registerOrUpdateProduct(product){
 
         if(!productAlreadyRegister&&productIsActiveOnHost){
             await preparingPostProduct(product)
-            .then(() => {
-                resolve();
+            .then(async () => {
+                await requireAllVariationsOfAProduct(idProductHost)
+                .then(() => {
+                    resolve();
+                })
             })
         }else
         if(!productAlreadyRegister&&(!productIsActiveOnHost)){
@@ -128,14 +134,20 @@ async function registerOrUpdateProduct(product){
         if(productAlreadyRegister&&productIsActiveOnHost){
             if(productIsActiveOnTray){
                 await preparingUpdateProduct(product, idProductOnTray)
-                .then(() => {
-                    resolve()
+                .then(async () => {
+                    await requireAllVariationsOfAProduct(idProductHost)
+                    .then(() => {
+                        resolve();
+                    })
                 })
             }
             else{
                 await preparingUndeleteProduct(product, idProductOnTray)
-                .then(() => {
-                    resolve()
+                .then(async () => {
+                    await requireAllVariationsOfAProduct(idProductHost)
+                    .then(() => {
+                        resolve();
+                    })
                 })
             }
         }else

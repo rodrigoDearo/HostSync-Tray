@@ -136,6 +136,66 @@ async function preparingPostSubCategory(category, subcategory, category_id){
 }
 
 
+async function preparingPostVariation(variant){
+    return new Promise(async (resolve, reject) => {
+        let body, infosTray;
+
+        await returnURLandAccessToken()
+        .then(async (response) => {
+            infosTray = response;
+            body = variant
+        })
+        .then(async () => {
+            let idProductHost = body.Variant.codigo
+            delete body.Variant.codigo
+            await registerVariation(infosTray[0], infosTray[1], body, idProductHost)
+            .then(() => {
+                resolve();
+            })
+        }) 
+    })  
+}
+
+
+async function preparingUpdateVariation(variant, idVariant){
+    return new Promise(async (resolve, reject) => {
+        let body, infosTray;
+
+        await returnURLandAccessToken()
+        .then(async (response) => {
+            infosTray = response;
+            body = variant
+        })
+        .then(async () => {
+            let idProductHost = body.Variant.codigo
+            delete body.Variant.codigo
+            await updateVariation(infosTray[0], infosTray[1], body, idVariant, idProductHost)
+            .then(() => {
+                resolve();
+            })
+        }) 
+    })
+}
+
+
+async function preparingDeleteVariation(idVariant, idProdutoHost, grade){
+    return new Promise(async (resolve, reject) => {
+        let infosTray;
+
+        await returnURLandAccessToken()
+        .then(async (response) => {
+            infosTray = response;
+        })
+        .then(async () => {
+            await deleteVariation(infosTray[0], infosTray[1], idVariant, idProdutoHost, grade)
+            .then(() => {
+                resolve();
+            })
+        }) 
+    })
+}
+
+
 async function returnURLandAccessToken(){
     return new Promise(async (resolve, reject) => {
         let url, access_token;
@@ -163,5 +223,8 @@ module.exports = {
     preparingDeleteProduct,
     preparingUndeleteProduct,
     preparingPostCategory,
-    preparingPostSubCategory
+    preparingPostSubCategory,
+    preparingPostVariation,
+    preparingUpdateVariation,
+    preparingDeleteVariation,
 }

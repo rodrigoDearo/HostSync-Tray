@@ -5,7 +5,8 @@ const { app } = require('electron')
 
 const { preparingPostProduct , preparingUpdateProduct, preparingDeleteProduct, preparingUndeleteProduct } = require('./preparingRequests.js');
 
-const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
+//const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
+const userDataPath = 'src/build';
 const pathProducts = path.join(userDataPath, 'products.json');
 
 async function requireAllProducts(config){
@@ -15,7 +16,25 @@ async function requireAllProducts(config){
             if (err)
                 throw err;
   
-            let codigoSQL = `SELECT id_produto, obs, barras, PRODUTOS_GRUPO.grupo, produto, estoque, PRODUTOS_MARCA.marca, valor_venda, custo, status FROM PRODUTOS LEFT JOIN PRODUTOS_GRUPO on PRODUTOS.grupo = PRODUTOS_GRUPO.id LEFT JOIN PRODUTOS_MARCA on PRODUTOS.marca = PRODUTOS_MARCA.id`;
+            let codigoSQL = `SELECT 
+                                P.ID_PRODUTO,
+                                P.PRODUTO,
+                                P.BARRAS,
+                                P.DESCRICAO_COMPLEMENTAR,
+                                P.OBS,
+                                P.VALOR_VENDA,
+                                P.CUSTO,
+                                M.MARCA,
+                                P.ESTOQUE,
+                                P.STATUS,
+                                P.GRADE,
+                                G.GRUPO,
+                                SG.SUBGRUPO
+                            FROM PRODUTOS P
+                            LEFT JOIN PRODUTOS_MARCA M ON P.MARCA = M.ID
+                            LEFT JOIN PRODUTOS_GRUPO G ON P.GRUPO = G.ID
+                            LEFT JOIN PRODUTOS_SUBGRUPO SG ON P.SUBGRUPO = SG.ID;
+                            `;
   
             db.query(codigoSQL, async function (err, result){
                 if (err)
@@ -23,7 +42,7 @@ async function requireAllProducts(config){
                 
                 await readingAllRecordProducts(result, 0)
                 .then(() => {
-                    resolve({code: 200, msg:'CLIENTES CONSULTADOS COM SUCESSO'});
+                    resolve({code: 200, msg:'PRODUTOS CONSULTADOS COM SUCESSO'});
                 })
                 
             });
@@ -48,17 +67,18 @@ async function readingAllRecordProducts(productsRecords, index){
         }
         else{
             let product = {
-                "codigo": record.ID_PRODUTO,
-                "observacao": record.OBS,
-                "codigo_barra": record.BARRAS,
-                "categoria": record.GRUPO,
-                "nome": record.PRODUTO,
-                "estoque": record.ESTOQUE,
-                "marca": record.MARCA,
-                "venda": record.VALOR_VENDA,
-                "custo": record.CUSTO,
-                "embalagem": 0,
-                "status": record.STATUS
+                "Product": {
+                    "ean": record.BARRAS,
+                    "name": record.PRODUTO,
+                    "description": record.DESCRICAO_COMPLEMENTAR,
+                    "description_small": record.OBS,
+                    "price": parseFloat((record.VALOR_VENDA).replace(',', '.')).toFixed(2),
+                    "cost_price": parseFloat((record.CUSTO).replace(',', '.')).toFixed(2),
+                    "brand": record.MARCA,
+                    "stock": parseInt(record.ESTOQUE),
+                    "category_id": null,
+                    "available": record.STATUS == 'ATIVO' ? 1 : 0
+                }
             }
     
             registerOrUpdateProduct(product)

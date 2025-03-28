@@ -60,6 +60,14 @@ async function returnValueFromJson(campo){
           case 'codetray':
             resolve(dados.tray.code);
             break;
+          
+          case 'access_token':
+            resolve(dados.tray.access_token);
+            break;
+  
+          case 'refresh_token':
+            resolve(dados.tray.refresh_token);
+            break;
         }
       }
     });

@@ -1,0 +1,61 @@
+const conexao = require('node-firebird');
+const fs = require ('fs')
+const path = require('node:path')
+const { app } = require('electron')
+
+const {  } = require('./preparingRequests.js');
+
+//const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
+const userDataPath = 'src/build';
+const pathCategories = path.join(userDataPath, 'categories.json');
+
+
+async function returnCategoryId(category, subCategory){
+    return new Promise(async (resolve, reject) => {
+         let categoriesDB = JSON.parse(fs.readFileSync(pathCategories))
+
+         
+         let idSubCategory = subCategoryExist(categoriesDB, category, subCategory)
+ 
+         if(!category){ //category name empty
+            resolve(null)
+         }else
+         if(category&&(!subCategory)){ //subcategory name empty but category fill
+            let idCategory = categoryExist(categoriesDB, category)
+
+            if(idCategory){ // category already register
+                resolve(idCategory)
+            }else{ // category not register
+
+            }
+         }else
+         if(category&&subCategory){
+            let idCategory = categoryExist(categoriesDB, category)
+            let idSubCategory = subCategoryExist(categoriesDB, category, subCategory)
+
+            if(idSubCategory){ // subcategory already register
+                resolve(idSubCategory)
+            }else
+            if(idCategory){ // just category exist
+                
+            }else
+            if((!idCategory)&&(!idSubCategory)){ // anyone exist
+
+            }
+         }
+    })
+}
+
+function categoryExist(data, category) {
+    return data[category]?.ID ?? false;
+}
+
+function subCategoryExist(data, category, subCategory) {
+    return data[category]?.SUBGRUPOS?.[subCategory] ?? false;
+}
+
+
+
+module.exports = {
+    returnCategoryId
+}

@@ -7,6 +7,7 @@ const { copyJsonFilesToUserData, returnConfigToAccessDB, gravarLog, deleteErrors
 const { requireAllProducts } = require('./utils/managerProducts.js')
 const { readNewRecords } = require('./utils/managerHostTableNotify.js')
 
+
 var win;
 
 const createWindow = () => {

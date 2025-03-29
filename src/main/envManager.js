@@ -24,6 +24,10 @@ function returnInfo(infoRequired){
                 resolve(process.env.CSM_SECRET) 
                 break;
 
+            case 'cliente_id':
+                resolve(process.env.CLI_ID_IMGUR)
+                break
+
         }
     })
 }

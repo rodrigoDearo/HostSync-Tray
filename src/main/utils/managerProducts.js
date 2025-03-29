@@ -6,7 +6,7 @@ const { app } = require('electron')
 const { preparingPostProduct , preparingUpdateProduct, preparingDeleteProduct, preparingUndeleteProduct } = require('./preparingRequests.js');
 const { returnCategoryId } = require('./managerCategories.js');
 const { requireAllVariationsOfAProduct } = require('./managerVariations.js')
-
+const { managementImageImgur } = require('./managerImages.js')
 
 //const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
 const userDataPath = 'src/build';
@@ -89,6 +89,14 @@ async function readingAllRecordProducts(productsRecords, index){
             .then(async (idCategory) => {
                 product.Product.category_id	= idCategory
                 await registerOrUpdateProduct(product)
+            })
+            .then(async () => {
+                if((record.FOTO)&&(record.FOTO!='null')){
+                    await managementImageImgur(record.ID_PRODUTO, record.FOTO)
+                    .then(async () => {
+
+                    })
+                }
             })
             .then(async() => {
                 setTimeout(async() => {

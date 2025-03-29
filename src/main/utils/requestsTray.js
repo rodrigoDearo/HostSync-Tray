@@ -174,6 +174,24 @@ function deleteVariation(url, access_token, idVariant, idProductHost, nameVarian
 }
 
 
+function uploadImage(url, access_token, body, idProductTray, idProductHost){
+    return new Promise(async (resolve, reject) => {
+        await axios.post(`${url}/products/${idProductTray}/images/?access_token=${access_token}`, body)
+        .then(async (answer) => {
+            await succesHandlingRequests('image', 'post', idProductHost, null, null)
+        })
+        .catch(async (error) => {
+            await errorHandlingRequest('image', 'POST', idProductHost, null, error.response.data.causes, body)
+            .then(() => {
+                resolve()
+            })
+        })
+        .finally(() => {
+            resolve()
+        })    
+    })
+}
+
 // ---------------------------------------------------------------------
 
 
@@ -222,6 +240,7 @@ module.exports = {
     registerVariation,
     updateVariation,
     deleteVariation,
+    uploadImage,
     generateToken,
-    updateToken
+    updateToken,
 }

@@ -1,4 +1,4 @@
-const { registerProduct, updateProduct, deleteProduct, undeleteProduct, registerCategory, deleteCategory, registerVariation, updateVariation, deleteVariation, } = require('./requestsTray');
+const { registerProduct, updateProduct, deleteProduct, undeleteProduct, registerCategory, deleteCategory, registerVariation, updateVariation, deleteVariation, uploadImage } = require('./requestsTray');
 const { returnValueFromJson } = require('./manageInfoUser');
 const { returnInfo } = require('../envManager');
 
@@ -195,6 +195,24 @@ async function preparingDeleteVariation(idVariant, idProdutoHost, grade){
     })
 }
 
+async function preparingUploadImage(image, idProductTray, idProductHost){
+    return new Promise(async (resolve, reject) => {
+        let body, infosTray;
+
+        await returnURLandAccessToken()
+        .then(async (response) => {
+            infosTray = response;
+            body = image
+        })
+        .then(async () => {
+            await uploadImage(infosTray[0], infosTray[1], body, idProductTray, idProductHost)
+            .then(() => {
+                resolve();
+            })
+        }) 
+    })  
+}
+
 
 async function returnURLandAccessToken(){
     return new Promise(async (resolve, reject) => {
@@ -227,4 +245,5 @@ module.exports = {
     preparingPostVariation,
     preparingUpdateVariation,
     preparingDeleteVariation,
+    preparingUploadImage
 }

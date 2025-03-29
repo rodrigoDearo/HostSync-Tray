@@ -1,7 +1,5 @@
 const axios = require('axios');
 const { succesHandlingRequests, errorHandlingRequest, } = require('./auxFunctions');
-const { refreshToken } = require('../../structures/configTray');
-
 
 
 function registerProduct(url, access_token, body, idHost){
@@ -135,7 +133,15 @@ function updateVariation(url, access_token, body, idVariant, idProductHost){
             await succesHandlingRequests('variation', 'update', idProductHost, idVariant, [body.Variant.value_1])
         })
         .catch(async (error) => {
-            await errorHandlingRequest('variation', 'PUT', idProductHost, idVariant, error.response.data.causes, body)
+            if(error.response.data.causes==undefined){
+                await errorHandlingRequest('variation', 'PUT', idProductHost, idVariant, error.response.data.causes, body)
+            }else
+            if(error.response.data.causes[0]=="Invalid parameter id."){
+                await succesHandlingRequests('variation', 'delete', idProductHost, idVariant, [body.Variant.value_1])
+            }else{
+                await errorHandlingRequest('variation', 'PUT', idProductHost, idVariant, error.response.data.causes, body)
+            }
+            
         })
         .finally(() => {
             resolve()
@@ -151,7 +157,15 @@ function deleteVariation(url, access_token, idVariant, idProductHost, nameVarian
             await succesHandlingRequests('variation', 'delete', idProductHost, idVariant, [nameVariant])
         })
         .catch(async (error) => {
-            await errorHandlingRequest('variation', 'DELETE', idProductHost, idVariant, error.response.data.causes, null)
+            if(error.response.data.causes==undefined){
+                await errorHandlingRequest('variation', 'DELETE', idProductHost, idVariant, error.response.data.causes, null)
+            }else
+            if(error.response.data.causes[0]=="Invalid parameter id."){
+                await succesHandlingRequests('variation', 'delete', idProductHost, idVariant, [nameVariant])
+            }else{
+                await errorHandlingRequest('variation', 'DELETE', idProductHost, idVariant, error.response.data.causes, null)
+            }
+            
         })
         .finally(() => {
             resolve()
@@ -186,7 +200,7 @@ function updateToken(url, refresh_token){
     return new Promise(async (resolve, reject) => {
         await axios.get(`${url}/auth?refresh_token=${refresh_token}`)
         .then(async (answer) => {
-            await succesHandlingRequests('token', 'get', null, null, [answer.data.access_token,])
+            await succesHandlingRequests('token', 'get', null, null, [answer.data.access_token])
         })
         .catch(async (error) => {
             await errorHandlingRequest('token', 'GET', 1, 1, error.response.data.causes, null)

@@ -7,8 +7,8 @@ const { preparingPostVariation, preparingUpdateVariation, preparingDeleteVariati
 const { returnConfigToAccessDB } = require('./auxFunctions.js')
 
 var variationsModificateds = []
-const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
-//const userDataPath = 'src/build';
+//const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
+const userDataPath = 'src/build';
 const pathProducts = path.join(userDataPath, 'products.json');
 
 async function requireAllVariationsOfAProduct(idProduct){
@@ -82,7 +82,7 @@ async function readingAllRecordVariations(variationsRecords, index, idProdutoHos
                     "codigo": record.ID_PRODUTO,
                     "ean": record.BARRAS,
                     "price": parseFloat(String(record.VALOR_VENDA ?? '').replace(',', '.')).toFixed(2),
-                    "cost_price": parseFloat(String(record.CUSTO ?? '').replace(',', '.')).toFixed(2),
+                    //"cost_price": parseFloat(String(record.CUSTO ?? '').replace(',', '.')).toFixed(2),
                     "stock": parseInt(record.ESTOQUE),
                     "minimum_stock": "1",
                     "type_1": "Variação",
@@ -119,14 +119,14 @@ async function registerUpdateOrDeleteVariant(variant){
         if(variantAlreadyRegister){
             await preparingUpdateVariation(variant, idVariantTray)
             .then(() => {
-                variationsModificateds.push = variant.Variant.value_1
+                variationsModificateds.push(variant.Variant.value_1)
                 resolve()
             })
         }else
         if(!variantAlreadyRegister){
             await preparingPostVariation(variant)
             .then(() => {
-                variationsModificateds.push = variant.Variant.value_1
+                variationsModificateds.push(variant.Variant.value_1)
                 resolve()
             })
         }
@@ -137,20 +137,21 @@ async function registerUpdateOrDeleteVariant(variant){
 
 async function deleteUnlistedVariations(product, idHost, arrayVariations) {
     return new Promise(async (resolve, reject) => {
-        let saveProduct = product
+        let variations = product.variations
 
         for(let i=0; i<arrayVariations.length; i++){
-            delete product.variations[`${arrayVariations[i]}`]
+            delete variations[`${arrayVariations[i]}`]
         }
 
-        for (const [grade, id] of Object.entries(product.variations)) {
+        console.log(variations)
+
+        for (const [grade, id] of Object.entries(variations)) {
             setTimeout(async () => {
                 await preparingDeleteVariation(id, idHost, grade)
             }, 1000);
         }
         
 
-        product = saveProduct;
         resolve()
     })
 }

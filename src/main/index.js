@@ -32,7 +32,7 @@ app.on('window-all-closed', () => {
 })
 
 app.whenReady().then(() => {
-  copyJsonFilesToUserData()
+ // copyJsonFilesToUserData()
   createWindow()
 
   const icon = path.join(__dirname, 'img/icon.png')
@@ -130,9 +130,12 @@ async function mainProcess(){
     .then(async () => {
       setInterval(async () => {
         await readNewRecords(config)
-        .then(async () => {
-
+        .then(() => {
+          gravarLog('---------------------------------------------------------------------')
+          gravarLog('REALIZADO A LEITURA PERIODICA DA TABELA DE NOTIFICACOES E DAS VENDAS')
+          gravarLog('---------------------------------------------------------------------')
         })
+      
       }, 600000);
     })
   })

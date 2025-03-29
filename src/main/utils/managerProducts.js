@@ -8,8 +8,8 @@ const { returnCategoryId } = require('./managerCategories.js');
 const { requireAllVariationsOfAProduct } = require('./managerVariations.js')
 
 
-const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
-//const userDataPath = 'src/build';
+//const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
+const userDataPath = 'src/build';
 const pathProducts = path.join(userDataPath, 'products.json');
 
 async function requireAllProducts(config){
@@ -91,10 +91,12 @@ async function readingAllRecordProducts(productsRecords, index){
                 await registerOrUpdateProduct(product)
             })
             .then(async() => {
-                await readingAllRecordProducts(productsRecords, i)
-                .then(() => {
-                    resolve()
-                })
+                setTimeout(async() => {
+                    await readingAllRecordProducts(productsRecords, i)
+                    .then(() => {
+                        resolve()
+                    })
+                }, 600);
             })
 
         }

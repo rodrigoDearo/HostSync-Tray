@@ -64,11 +64,12 @@ async function requireAllRecordsProductNotifyTable(config){
                                 P.GRADE,
                                 G.GRUPO,
                                 SG.SUBGRUPO
-                            FROM PRODUTOS P
+                            FROM NOTIFICACOES_HOSTSYNC AS nh
+                            LEFT JOIN PRODUTOS AS P ON nh.iditem = P.id_produto
                             LEFT JOIN PRODUTOS_MARCA M ON P.MARCA = M.ID
                             LEFT JOIN PRODUTOS_GRUPO G ON P.GRUPO = G.ID
-                            LEFT JOIN PRODUTOS_SUBGRUPO SG ON P.SUBGRUPO = SG.ID;
-                            WHERE nh.tipo = 'PRODUTO'
+                            LEFT JOIN PRODUTOS_SUBGRUPO SG ON P.SUBGRUPO = SG.ID
+                            WHERE nh.tipo='PRODUTO'
                             AND nh.id IN (
                                 SELECT MIN(id)
                                 FROM NOTIFICACOES_HOSTSYNC

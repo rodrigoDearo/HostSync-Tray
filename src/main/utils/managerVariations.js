@@ -71,10 +71,14 @@ async function readingAllRecordVariations(variationsRecords, index, idProdutoHos
 
 
         if(i > variationsRecords.length){
-            await deleteUnlistedVariations(productsDB[`${idProdutoHost}`], idProdutoHost, variationsModificateds)
-            .then(async () => {
+            if(productsDB[`${idProdutoHost}`]){
+                await deleteUnlistedVariations(productsDB[`${idProdutoHost}`], idProdutoHost, variationsModificateds)
+                .then(async () => {
+                    resolve()
+                })
+            }else{
                 resolve()
-            })
+            }
         }
         else{
             let variant = {

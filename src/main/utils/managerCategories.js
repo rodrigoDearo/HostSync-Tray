@@ -44,14 +44,18 @@ async function returnCategoryId(category, subCategory){
             if((!idCategory)&&(!idSubCategory)){ // anyone exist
                 await preparingPostCategory(category)
                 .then(async (newIdCategory) => {
-                    setTimeout(async () => {
-                        await preparingPostSubCategory(category, subCategory, newIdCategory)
-                        .then(async (id) => {
-                            resolve(id)
-                        })
-                    }, 1500);
-                    
+                    if(!newIdCategory){
+                        resolve()
+                    }else{
+                        setTimeout(async () => {
+                            await preparingPostSubCategory(category, subCategory, newIdCategory)
+                            .then(async (id) => {
+                                resolve(id)
+                            })
+                        }, 1500);
+                    }
                 })
+
             }
          }
     })

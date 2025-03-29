@@ -1,6 +1,6 @@
 {
     "host": {
-        "pathdb": ""
+        "pathdb": "C:/TSD/Host"
     },
     "tray": {
         "url": "",

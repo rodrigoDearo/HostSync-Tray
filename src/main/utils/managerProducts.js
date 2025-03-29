@@ -90,12 +90,11 @@ async function readingAllRecordProducts(productsRecords, index){
                 await registerOrUpdateProduct(product)
             })
             .then(async () => {
-                if((record.FOTO)&&(record.FOTO!='null')){
-                    await uploadOrDeleteImageImgur(record.ID_PRODUTO, record.FOTO)
-                    .then(async () => {
-                        await uploadOrDeleteImageTray(record.ID_PRODUTO)
-                    })
-                }
+                await uploadOrDeleteImageImgur(record.ID_PRODUTO, record.FOTO)
+                .then(async () => {
+                    await uploadOrDeleteImageTray(record.ID_PRODUTO)
+                })
+                
             })
             .then(async() => {
                 setTimeout(async() => {

@@ -23,7 +23,6 @@ async function return8caracteresBase64(imagem, caminho){
       try {
         // Verificar se o arquivo existe antes de prosseguir
         if (!fs.existsSync(`${caminho}/imgProdutos/${imagem}`)) {
-          gravarLog(`A imagem ${caminho}/imgProdutos/${imagem} não foi encontrada.`);
           resolve();
           return;
         }
@@ -56,7 +55,6 @@ async function uploadImageImgur(idProduto, imagem, caminho){
 
         // Verificar se o arquivo existe antes de prosseguir
         if(!fs.existsSync(`${caminho}/imgProdutos/${imagem}`)) {
-          gravarLog(`A imagem ${caminho}/imgProdutos/${imagem} não foi encontrada.`);
           resolve();
           return;
         }

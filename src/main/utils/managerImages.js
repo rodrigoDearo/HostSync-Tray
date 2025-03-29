@@ -4,6 +4,7 @@ const fs = require('fs');
 const FormData = require('form-data');
 const path = require('path');
 const util = require('util');
+const { app } = require('electron')
 
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);

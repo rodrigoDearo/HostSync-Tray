@@ -3,6 +3,7 @@ const axios = require('axios');
 const fs = require('fs');
 const FormData = require('form-data');
 const path = require('path');
+const util = require('util');
 
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -10,16 +11,16 @@ const writeFileAsync = util.promisify(fs.writeFile);
 const { returnValueFromJson } = require('./manageInfoUser.js')
 const { gravarLog } = require('./auxFunctions.js')
 const { returnInfo } = require('../envManager.js')
+const { preparingUploadImage } = require('./preparingRequests.js');
 
 //const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
 const userDataPath = 'src/build';
 const pathLinksIMG = path.join(userDataPath, 'links_img.json');
+const pathProducts = path.join(userDataPath, 'products.json');
 
-  async function return8caracteresBase64(imagem){
+async function return8caracteresBase64(imagem, caminho){
     return new Promise(async (resolve, reject) => {
       try {
-        let caminho = await returnValueFromJson('pathdbhost')
-
         // Verificar se o arquivo existe antes de prosseguir
         if (!fs.existsSync(`${caminho}/imgProdutos/${imagem}`)) {
           gravarLog(`A imagem ${caminho}/imgProdutos/${imagem} não foi encontrada.`);
@@ -46,11 +47,12 @@ const pathLinksIMG = path.join(userDataPath, 'links_img.json');
  * @param {string} imagem: nome do arquivo do tipo imagem dentro do caminho especificado no arquivo dados.json da pasta de imagens dos produtos
  * @returns url da imagem alocada na web 
  */
-async function uploadImageImgur(idProduto, imagem){
+async function uploadImageImgur(idProduto, imagem, caminho){
    return new Promise(async (resolve, reject) => {
     try {
         const imagens = JSON.parse(fs.readFileSync(pathLinksIMG, 'utf8'));
         let clientID = await returnInfo('cliente_id')
+      
 
         // Verificar se o arquivo existe antes de prosseguir
         if(!fs.existsSync(`${caminho}/imgProdutos/${imagem}`)) {
@@ -77,7 +79,7 @@ async function uploadImageImgur(idProduto, imagem){
         axios(config)
         .then(async function (response) {
           gravarLog(`UPLOAD DA IMAGEM ${caminho}/imgProdutos/${imagem} NO IMGUR REALIZADO COM SUCESSO`);
-          let primeirosCaracterBase64 = await return8caracteresBase64(imagem);
+          let primeirosCaracterBase64 = await return8caracteresBase64(imagem, caminho);
           imagens[idProduto] = {
             "link": response.data.data.link,
             "img64": primeirosCaracterBase64,
@@ -90,8 +92,8 @@ async function uploadImageImgur(idProduto, imagem){
         })
         .catch(function (error) {
           let erroRetorno = JSON.stringify(error);
-          gravarLog(`Erro na requisicao de upload da imagem no Imgur. Com erro: ${erroRetorno}`);
-          console.log(`Erro na requisicao de upload da imagem no Imgur. Com erro: ${erroRetorno}`);
+          gravarLog(`Erro na requisicao de upload da imagem no Imgur. Com erro:`);
+          console.log(`Erro na requisicao de upload da imagem no Imgur. Com erro:`);
           resolve()
         });
 
@@ -149,11 +151,11 @@ async function deleteImageImgur(idProduto){
 }
 
 
-async function managementImageImgur(idProduto, imagem){
+async function uploadOrDeleteImageImgur(idProduto, imagem){
   return new Promise(async (resolve, reject) => {
     try {
       const bancoImagens = JSON.parse(fs.readFileSync(pathLinksIMG, 'utf8'));
-      let primeirosCaracterBase64 = await return8caracteresBase64(imagem);
+      let caminho = await returnValueFromJson('pathdbhost')
 
       if (!fs.existsSync(`${caminho}/imgProdutos/${imagem}`)) {
         gravarLog(`A IMAGEM ${caminho}/imgProdutos/${imagem} NAO FOI ENCONTRADA.`);
@@ -162,6 +164,8 @@ async function managementImageImgur(idProduto, imagem){
       }
 
       if(imagem){
+        let primeirosCaracterBase64 = await return8caracteresBase64(imagem, caminho);
+
         if(bancoImagens[idProduto]){
           if(primeirosCaracterBase64==bancoImagens[idProduto].img64){
             resolve()
@@ -169,7 +173,7 @@ async function managementImageImgur(idProduto, imagem){
           else{
             await deleteImageImgur(idProduto)
             .then(async () => {
-              await uploadImageImgur(idProduto, imagem)
+              await uploadImageImgur(idProduto, imagem, caminho)
             })
             .then(() => {
               setTimeout(() => {
@@ -180,7 +184,7 @@ async function managementImageImgur(idProduto, imagem){
           }
         }
         else{
-          await uploadImageImgur(idProduto, imagem)
+          await uploadImageImgur(idProduto, imagem, caminho)
           .then(() => {
             setTimeout(() => {
               resolve()
@@ -202,15 +206,36 @@ async function managementImageImgur(idProduto, imagem){
         }
       }
         
-
     } catch (error) {
       gravarLog(`ERRO NA TRATATIVA DE ERRO DO IMGUR: ${error}`);
-      console.log(`ERRO NA TRATATIVA DE ERRO DO IMGUR`);
+      console.log(`ERRO NA TRATATIVA DE ERRO DO IMGUR:`);
     }
   })
 }
 
 
+async function uploadOrDeleteImageTray(idProductHost){
+  return new Promise(async (resolve, reject) => {
+      const products = JSON.parse(fs.readFileSync(pathProducts, 'utf8'));
+      const bancoImagens = JSON.parse(fs.readFileSync(pathLinksIMG, 'utf8'));
+
+      if(products[`${idProductHost}`]){
+        let idTrayProduct = products[`${idProductHost}`].idTray;
+        let linkImg = bancoImagens[`${idProductHost}`] ? bancoImagens[`${idProductHost}`].link : " "
+
+        await preparingUploadImage(linkImg, idTrayProduct, idProductHost)
+        .finally(() => {
+          resolve()
+        })
+      }
+      else{
+        resolve()
+      }
+  })
+}
+
+
 module.exports = {
-  managementImageImgur
+  uploadOrDeleteImageImgur,
+  uploadOrDeleteImageTray
 };

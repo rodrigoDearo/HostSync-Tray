@@ -202,7 +202,11 @@ async function preparingUploadImage(image, idProductTray, idProductHost){
         await returnURLandAccessToken()
         .then(async (response) => {
             infosTray = response;
-            body = image
+            body = {
+                "Images":  {
+                     "picture_source_1":image,
+                 }
+             }
         })
         .then(async () => {
             await uploadImage(infosTray[0], infosTray[1], body, idProductTray, idProductHost)

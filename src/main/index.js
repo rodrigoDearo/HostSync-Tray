@@ -132,7 +132,7 @@ async function mainProcess(){
         await readNewRecords(config)
         .then(() => {
           gravarLog('---------------------------------------------------------------------')
-          gravarLog('REALIZADO A LEITURA PERIODICA DA TABELA DE NOTIFICACOES E DAS VENDAS')
+          gravarLog('REALIZADO A LEITURA PERIODICA DA TABELA DE NOTIFICACOES')
           gravarLog('---------------------------------------------------------------------')
         })
       
@@ -149,5 +149,7 @@ async function mainProcess(){
  * MUDAR INTEGRADOR PRA 2.0 E COMPACTAR
  * 
  * VER MELHORIAS QUE COLOQUEI NO CELULAR SE VALEM A PENA DEPOIS DA CONVERSA COM O RAPAZ
+ * 
+ * IMG UR
  */
 

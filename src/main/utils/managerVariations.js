@@ -71,7 +71,7 @@ async function readingAllRecordVariations(variationsRecords, index, idProdutoHos
 
 
         if(i > variationsRecords.length){
-            await deleteUnlistedVariations(productsDB[`${idProdutoHost}`], productsDB[`${idProdutoHost}`].idTray, variationsModificateds)
+            await deleteUnlistedVariations(productsDB[`${idProdutoHost}`], idProdutoHost, variationsModificateds)
             .then(async () => {
                 resolve()
             })
@@ -142,8 +142,6 @@ async function deleteUnlistedVariations(product, idHost, arrayVariations) {
         for(let i=0; i<arrayVariations.length; i++){
             delete variations[`${arrayVariations[i]}`]
         }
-
-        console.log(variations)
 
         for (const [grade, id] of Object.entries(variations)) {
             setTimeout(async () => {

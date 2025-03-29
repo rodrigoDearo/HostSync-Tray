@@ -169,6 +169,17 @@ async function succesHandlingRequests(destiny, resource, idHost, idTray, othersI
       fs.writeFileSync(pathProducts, JSON.stringify(productsDB), 'utf-8')
       resolve()
     }else
+    if(destiny=="image"){
+
+      switch (resource) {
+        case "post":
+          gravarLog('Atualizado imagem de produto com sucesso');
+          break;
+
+      }
+      
+      resolve()
+    }else
     if(destiny=="token"){
       let configApp = JSON.parse(fs.readFileSync(pathConfigApp))
 
@@ -239,6 +250,7 @@ async function deleteErrorsRecords(){
     errorsDB.category = {}
     errorsDB.subcategory = {}
     errorsDB.variation = {}
+    errorsDB.image = {}
     errorsDB.token = {}
 
     fs.writeFileSync(pathErrorsDB, JSON.stringify(errorsDB), 'utf-8');

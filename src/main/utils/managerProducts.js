@@ -1,12 +1,11 @@
 const conexao = require('node-firebird');
 const fs = require ('fs')
 const path = require('node:path')
-const { app } = require('electron')
 
 const { preparingPostProduct , preparingUpdateProduct, preparingDeleteProduct, preparingUndeleteProduct } = require('./preparingRequests.js');
 const { returnCategoryId } = require('./managerCategories.js');
 const { requireAllVariationsOfAProduct } = require('./managerVariations.js')
-const { managementImageImgur } = require('./managerImages.js')
+const { uploadOrDeleteImageImgur, uploadOrDeleteImageTray } = require('./managerImages.js')
 
 //const userDataPath = path.join(app.getPath('userData'), 'ConfigFiles');
 const userDataPath = 'src/build';
@@ -92,9 +91,9 @@ async function readingAllRecordProducts(productsRecords, index){
             })
             .then(async () => {
                 if((record.FOTO)&&(record.FOTO!='null')){
-                    await managementImageImgur(record.ID_PRODUTO, record.FOTO)
+                    await uploadOrDeleteImageImgur(record.ID_PRODUTO, record.FOTO)
                     .then(async () => {
-
+                        await uploadOrDeleteImageTray(record.ID_PRODUTO)
                     })
                 }
             })

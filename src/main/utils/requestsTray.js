@@ -181,6 +181,9 @@ function uploadImage(url, access_token, body, idProductTray, idProductHost){
             await succesHandlingRequests('image', 'post', idProductHost, null, null)
         })
         .catch(async (error) => {
+            console.log(`${url}/products/${idProductTray}/images/?access_token=${access_token}`)
+            console.log(body)
+
             await errorHandlingRequest('image', 'POST', idProductHost, null, error.response.data.causes, body)
             .then(() => {
                 resolve()

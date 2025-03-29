@@ -7,6 +7,7 @@ require('dotenv').config({ path: path.join(userDataPath, '.env') });
 
 function returnInfo(infoRequired){
     return new Promise((resolve, reject) => {
+
         switch (infoRequired) {
             case 'user_database':
                 resolve(process.env.USR_DATABASE) 
@@ -25,7 +26,7 @@ function returnInfo(infoRequired){
                 break;
 
             case 'cliente_id':
-                resolve(process.env.CLI_ID_IMGUR)
+                resolve(process.env.CLI_IDIMGUR)
                 break
 
         }

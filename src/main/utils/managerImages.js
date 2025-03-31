@@ -157,7 +157,6 @@ async function uploadOrDeleteImageImgur(idProduto, imagem){
       let caminho = await returnValueFromJson('pathdbhost')
 
       if (!fs.existsSync(`${caminho}/imgProdutos/${imagem}`)) {
-        gravarLog(`A IMAGEM ${caminho}/imgProdutos/${imagem} NAO FOI ENCONTRADA.`);
         resolve();
         return;
       }

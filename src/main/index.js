@@ -51,7 +51,7 @@ app.whenReady().then(() => {
   ])
   
   tray.setContextMenu(contextMenu)
-  tray.setToolTip('Hostsync - PedOk')
+  tray.setToolTip('Hostsync - Tray')
 })
 
 
